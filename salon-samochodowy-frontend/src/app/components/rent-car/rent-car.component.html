@@ -1,0 +1,12 @@
+<div class="d-flex gap-2 flex-wrap">
+  @if(car.isAvailableForRent) { 
+    <button class="btn btn-primary btn-sm d-flex align-items-center" (click)="rentCar()"> 
+      <i class="bi bi-car-front me-1"></i>Wypożycz 
+    </button> 
+  }
+  @if(!car.isAvailableForRent) { 
+    <button class="btn btn-info btn-sm d-flex align-items-center" (click)="returnCar()"> 
+      <i class="bi bi-arrow-return-left me-1"></i>Zwróć 
+    </button> 
+  }
+</div>

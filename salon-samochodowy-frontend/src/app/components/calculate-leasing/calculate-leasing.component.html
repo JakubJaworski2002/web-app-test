@@ -1,0 +1,50 @@
+<div class="d-flex gap-2 flex-wrap">
+  @if (!isDealer) {
+    <button class="btn btn-secondary btn-sm d-flex align-items-center" (click)="openLeasingDialog()">
+        <i class="bi bi-calculator me-1"></i>Leasing
+    </button>
+  }
+</div>
+
+<ng-template #Leasingdialog>
+  <div class="calculate-form">
+      <h2>Leasing</h2>
+      <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+          <p class="card-text">
+            <strong>Rok:</strong> {{ car.year }}<br>
+            <strong>VIN:</strong> {{ car.vin }}<br>
+            <strong>Cena:</strong> {{ car.price }} PLN<br>
+          </p>
+      </div>
+      <form (ngSubmit)="calculate()">
+          <label for="brand">Wpłata własna</label>
+          <input type="text" id="downPayment" [(ngModel)]="lRequest.downPayment" name="downPayment" required />
+    
+          <label for="model">Okres leasingu</label>
+          <input type="text" id="months" [(ngModel)]="lRequest.months" name="months" required />
+          <div class="calculate-form-buttons">
+              <button type="submit">Oblicz</button>
+              <button type="button" mat-button (click)="closeDialog()">Zamknij</button>
+          </div>
+      </form>
+  </div>
+</ng-template>
+<ng-template #LeasingSummary>
+  <div class="calculate-form">
+      <h2>Leasing - podsumowanie</h2>
+      <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ lResponse.carBrand }} {{ lResponse.carModel }}</h5>
+          <p class="card-text">
+            <strong>Cena:</strong> {{ lResponse.totalPrice }} PLN<br>
+            <strong>Wpłata własna:</strong> {{ lResponse.downPayment }} PLN<br>
+            <strong>Do spłaty:</strong> {{ lResponse.remainingAmount }} PLN<br>
+            <strong>Okres spłaty:</strong> {{ lResponse.months }} Miesięcy<br>
+            <strong>Miesięczna rata:</strong> {{ lResponse.monthlyRate }} PLN<br>
+          </p>
+      </div>
+      <div class="calculate-form-buttons">
+          <button type="button" mat-button (click)="closeDialog()">Zamknij</button>
+      </div>
+  </div>
+</ng-template>

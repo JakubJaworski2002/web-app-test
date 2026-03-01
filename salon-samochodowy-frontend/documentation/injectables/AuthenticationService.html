@@ -1,0 +1,1061 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>salon-samochodowy-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">salon-samochodowy-frontend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Wprowadź tekst wyszukiwania"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >AuthenticationService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Plik</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/authentication.service.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Opis</h3>
+            </p>
+            <p class="comment">
+                <p>AuthenticationService zarządza uwierzytelnianiem użytkowników, w tym rejestracją, logowaniem i wylogowywaniem.</p>
+
+            </p>
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Indeks</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Włąściwości</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#apiUrl" >apiUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#currentUser$" >currentUser$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#currentUserSubject" >currentUserSubject</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Metody</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkCurrentUser" >checkCurrentUser</a>
+                            </li>
+                            <li>
+                                <a href="#getCurrentUser" >getCurrentUser</a>
+                            </li>
+                            <li>
+                                <a href="#isLoggedIn" >isLoggedIn</a>
+                            </li>
+                            <li>
+                                <a href="#login" >login</a>
+                            </li>
+                            <li>
+                                <a href="#logout" >logout</a>
+                            </li>
+                            <li>
+                                <a href="#register" >register</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Konstruktor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, router: Router)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="45" class="link-to-prism">src/app/services/authentication.service.ts:45</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Konstruktor serwisu.</p>
+</div>
+                            <div>
+                                    <b>Parametry :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nazwa</td>
+                                                    <td>Typ</td>
+                                                <td>Opcjonalne</td>
+                                                    <td>Opis</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            Nie
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>Serwis HttpClient do wykonywania żądań HTTP.</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            Nie
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>Serwis Router do nawigacji między trasami.</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Metody
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkCurrentUser"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>checkCurrentUser</b></span>
+                        <a href="#checkCurrentUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkCurrentUser()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="62"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Sprawdza, czy użytkownik jest aktualnie zalogowany, wykonując żądanie do backendu.
+Aktualizuje <code>currentUserSubject</code> na podstawie odpowiedzi.
+Jeśli żądanie zakończy się błędem, ustawia <code>currentUserSubject</code> na <code>null</code>.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentUser"></a>
+                    <span class="name">
+                        <span ><b>getCurrentUser</b></span>
+                        <a href="#getCurrentUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentUser()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="165"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:165</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Pobiera bieżącego użytkownika jako <code>User</code> lub <code>null</code>.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="../interfaces/User.html" target="_self" >User | null</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Aktualny użytkownik lub <code>null</code> jeśli nie jest zalogowany.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoggedIn"></a>
+                    <span class="name">
+                        <span ><b>isLoggedIn</b></span>
+                        <a href="#isLoggedIn"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isLoggedIn()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="156"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda pomocnicza do sprawdzania, czy użytkownik jest zalogowany.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p><code>true</code> jeśli użytkownik jest zalogowany, w przeciwnym razie <code>false</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="login"></a>
+                    <span class="name">
+                        <span ><b>login</b></span>
+                        <a href="#login"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>login(username: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="111"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:111</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Loguje użytkownika.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parametry :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nazwa</td>
+                                                <td>Typ</td>
+                                            <td>Opcjonalne</td>
+                                                <td>Opis</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>username</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Nazwa użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Hasło użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Zwraca : </b>    <code>Observable&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Observable emitujący odpowiedź z backendu.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logout"></a>
+                    <span class="name">
+                        <span ><b>logout</b></span>
+                        <a href="#logout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>logout()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="134"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Wylogowuje aktualnie zalogowanego użytkownika.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>    <code>Observable&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Observable emitujący odpowiedź z backendu.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="register"></a>
+                    <span class="name">
+                        <span ><b>register</b></span>
+                        <a href="#register"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>register(username: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, firstName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, lastName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="86"
+                                    class="link-to-prism">src/app/services/authentication.service.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Rejestruje nowego użytkownika.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parametry :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nazwa</td>
+                                                <td>Typ</td>
+                                            <td>Opcjonalne</td>
+                                                <td>Opis</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>username</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Nazwa użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Hasło użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>firstName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Imię użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>lastName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Nie
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Nazwisko użytkownika.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Zwraca : </b>    <code>Observable&lt;any&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Observable emitujący odpowiedź z backendu.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Włąściwości
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="apiUrl"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>apiUrl</b></span>
+                        <a href="#apiUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;http://localhost:3000&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="32" class="link-to-prism">src/app/services/authentication.service.ts:32</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>URL do backendu API.
+Można rozważyć przeniesienie tego do pliku konfiguracyjnego.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentUser$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>currentUser$</b></span>
+                        <a href="#currentUser$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="../interfaces/User.html" target="_self" >Observable&lt;User | null&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>this.currentUserSubject.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="45" class="link-to-prism">src/app/services/authentication.service.ts:45</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Observable emitujący zmiany bieżącego użytkownika.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentUserSubject"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>currentUserSubject</b></span>
+                        <a href="#currentUserSubject"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="../interfaces/User.html" target="_self" >BehaviorSubject&lt;User | null&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>new BehaviorSubject&lt;User | null&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="39" class="link-to-prism">src/app/services/authentication.service.ts:39</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>BehaviorSubject przechowujący bieżącego użytkownika.
+Inicjalizowany jest jako <code>null</code>, gdy użytkownik nie jest zalogowany.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Observable, BehaviorSubject, of } from &#x27;rxjs&#x27;;
+import { tap, catchError } from &#x27;rxjs/operators&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+
+/**
+ * Interface reprezentująca użytkownika.
+ */
+export interface User {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  isDealer: boolean;
+}
+
+/**
+ * AuthenticationService zarządza uwierzytelnianiem użytkowników, w tym rejestracją, logowaniem i wylogowywaniem.
+ *
+ * @injectable
+ */
+@Injectable({
+  providedIn: &#x27;root&#x27;,
+})
+export class AuthenticationService {
+  /**
+   * URL do backendu API.
+   * Można rozważyć przeniesienie tego do pliku konfiguracyjnego.
+   * @type {string}
+   */
+  private apiUrl: string &#x3D; &#x27;http://localhost:3000&#x27;; // Zaktualizuj URL backendu
+
+  /**
+   * BehaviorSubject przechowujący bieżącego użytkownika.
+   * Inicjalizowany jest jako &#x60;null&#x60;, gdy użytkownik nie jest zalogowany.
+   * @type {BehaviorSubject&lt;User | null&gt;}
+   */
+  private currentUserSubject: BehaviorSubject&lt;User | null&gt; &#x3D; new BehaviorSubject&lt;User | null&gt;(null);
+
+  /**
+   * Observable emitujący zmiany bieżącego użytkownika.
+   * @type {Observable&lt;User | null&gt;}
+   */
+  public currentUser$: Observable&lt;User | null&gt; &#x3D; this.currentUserSubject.asObservable();
+
+  /**
+   * Konstruktor serwisu.
+   *
+   * @param {HttpClient} http - Serwis HttpClient do wykonywania żądań HTTP.
+   * @param {Router} router - Serwis Router do nawigacji między trasami.
+   */
+  constructor(private http: HttpClient, private router: Router) {
+    this.checkCurrentUser();
+  }
+
+  /**
+   * Sprawdza, czy użytkownik jest aktualnie zalogowany, wykonując żądanie do backendu.
+   * Aktualizuje &#x60;currentUserSubject&#x60; na podstawie odpowiedzi.
+   * Jeśli żądanie zakończy się błędem, ustawia &#x60;currentUserSubject&#x60; na &#x60;null&#x60;.
+   */
+  private checkCurrentUser(): void {
+    this.http.get&lt;{ user: User }&gt;(&#x60;${this.apiUrl}/current-user&#x60;, { withCredentials: true })
+      .pipe(
+        tap(response &#x3D;&gt; {
+          this.currentUserSubject.next(response.user);
+        }),
+        catchError((error) &#x3D;&gt; {
+          console.warn(&#x27;Brak zalogowanego użytkownika lub wystąpił błąd:&#x27;, error);
+          this.currentUserSubject.next(null);
+          return of(null);
+        })
+      )
+      .subscribe();
+  }
+
+  /**
+   * Rejestruje nowego użytkownika.
+   *
+   * @param {string} username - Nazwa użytkownika.
+   * @param {string} password - Hasło użytkownika.
+   * @param {string} firstName - Imię użytkownika.
+   * @param {string} lastName - Nazwisko użytkownika.
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź z backendu.
+   */
+  register(username: string, password: string, firstName: string, lastName: string): Observable&lt;any&gt; {
+    return this.http.post&lt;{ user: User }&gt;(
+      &#x60;${this.apiUrl}/register&#x60;,
+      { username, password, firstName, lastName },
+      { withCredentials: true }
+    ).pipe(
+      tap(response &#x3D;&gt; {
+        if (response.user) {
+          this.currentUserSubject.next(response.user);
+        }
+      }),
+      catchError((error) &#x3D;&gt; {
+        console.error(&#x27;Błąd podczas rejestracji:&#x27;, error);
+        return of(error);
+      })
+    );
+  }
+
+  /**
+   * Loguje użytkownika.
+   *
+   * @param {string} username - Nazwa użytkownika.
+   * @param {string} password - Hasło użytkownika.
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź z backendu.
+   */
+  login(username: string, password: string): Observable&lt;any&gt; {
+    return this.http.post&lt;{ user: User }&gt;(
+      &#x60;${this.apiUrl}/login&#x60;,
+      { username, password },
+      { withCredentials: true }
+    ).pipe(
+      tap(response &#x3D;&gt; {
+        if (response.user) {
+          this.currentUserSubject.next(response.user);
+        }
+      }),
+      catchError((error) &#x3D;&gt; {
+        console.error(&#x27;Błąd podczas logowania:&#x27;, error);
+        return of(error);
+      })
+    );
+  }
+
+  /**
+   * Wylogowuje aktualnie zalogowanego użytkownika.
+   *
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź z backendu.
+   */
+  logout(): Observable&lt;any&gt; {
+    return this.http.post&lt;{ message: string }&gt;(
+      &#x60;${this.apiUrl}/logout&#x60;,
+      {},
+      { withCredentials: true }
+    ).pipe(
+      tap(() &#x3D;&gt; {
+        this.currentUserSubject.next(null);
+        this.router.navigate([&#x27;/&#x27;]); // Przekierowanie na stronę główną po wylogowaniu
+      }),
+      catchError((error) &#x3D;&gt; {
+        console.error(&#x27;Błąd podczas wylogowywania:&#x27;, error);
+        return of(error);
+      })
+    );
+  }
+
+  /**
+   * Metoda pomocnicza do sprawdzania, czy użytkownik jest zalogowany.
+   *
+   * @returns {boolean} &#x60;true&#x60; jeśli użytkownik jest zalogowany, w przeciwnym razie &#x60;false&#x60;.
+   */
+  isLoggedIn(): boolean {
+    return this.currentUserSubject.value !&#x3D;&#x3D; null;
+  }
+
+  /**
+   * Pobiera bieżącego użytkownika jako &#x60;User&#x60; lub &#x60;null&#x60;.
+   *
+   * @returns {User | null} Aktualny użytkownik lub &#x60;null&#x60; jeśli nie jest zalogowany.
+   */
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> pasujących wyników "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">Brak pasujących wyników "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'AuthenticationService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

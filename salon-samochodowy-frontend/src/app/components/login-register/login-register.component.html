@@ -1,0 +1,156 @@
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="authModalLabel">
+          {{ isLoginMode ? 'Logowanie' : 'Rejestracja' }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+      </div>
+      <div class="modal-body">
+        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+          
+          <!-- Nazwa użytkownika -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Nazwa użytkownika</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              [(ngModel)]="username"
+              name="username"
+              #usernameModel="ngModel"
+              required
+              minlength="3"
+            >
+            @if(usernameModel.invalid && (usernameModel.dirty || usernameModel.touched))
+            {
+              <div class="text-danger">
+                @if(usernameModel.errors?.['required'])
+                {
+                  <div>Nazwa użytkownika jest wymagana.</div>
+                }
+                @if(usernameModel.errors?.['minlength'])
+                {
+                  <div>Nazwa użytkownika musi mieć co najmniej 3 znaki.</div>
+                }  
+              </div>
+            }
+
+          </div>
+          
+          <!-- Hasło -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Hasło</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              [(ngModel)]="password"
+              name="password"
+              #passwordModel="ngModel"
+              required
+              minlength="6"
+            >
+            @if(passwordModel.invalid && (passwordModel.dirty || passwordModel.touched))
+            {
+              <div class="text-danger">
+                @if(passwordModel.errors?.['required'])
+                {
+                  <div>Hasło jest wymagane.</div>
+                }
+                @if(passwordModel.errors?.['minlength'])
+                {
+                  <div>Hasło musi mieć co najmniej 6 znaków.</div>
+                }
+              </div>
+            }
+
+          </div>
+
+          <!-- Pola rejestracyjne -->
+           @if(!isLoginMode)
+           {
+            <div>
+              <!-- Imię -->
+              <div class="mb-3">
+                <label for="firstName" class="form-label">Imię</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  [(ngModel)]="firstName"
+                  name="firstName"
+                  #firstNameModel="ngModel"
+                  required
+                >
+                @if(firstNameModel.invalid && (firstNameModel.dirty || firstNameModel.touched))
+                {
+                  <div class="text-danger">
+                    @if(firstNameModel.errors?.['required'])
+                    {
+                      <div>Imię jest wymagane.</div>
+                    }
+                  </div>
+                }
+                
+              </div>
+              
+              <!-- Nazwisko -->
+              <div class="mb-3">
+                <label for="lastName" class="form-label">Nazwisko</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  [(ngModel)]="lastName"
+                  name="lastName"
+                  #lastNameModel="ngModel"
+                  required
+                >
+                @if(lastNameModel.invalid && (lastNameModel.dirty || lastNameModel.touched))
+                {
+                  <div class="text-danger">
+                    @if(lastNameModel.errors?.['required'])
+                    {
+                      <div>Nazwisko jest wymagane.</div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+           }
+
+
+          <!-- Komunikaty o błędach i sukcesie -->
+           @if(errorMessage)
+           {
+            <div class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+           }
+           @if(successMessage)
+           {
+            <div class="alert alert-success">
+              {{ successMessage }}
+            </div>
+           }
+          
+          <!-- Przycisk Submit -->
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="authForm.invalid"
+          >
+            {{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj się' }}
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" (click)="toggleMode()">
+          {{ isLoginMode ? 'Nie masz konta? Zarejestruj się' : 'Masz już konto? Zaloguj się' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="add-customer">
+  <h2>Dodaj Nowego Klienta</h2>
+  <form (ngSubmit)="addCustomer()" #customerForm="ngForm">
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label>
+      <input type="text" id="username" [(ngModel)]="newCustomer.username" name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Hasło:</label>
+      <input type="password" id="password" [(ngModel)]="newCustomer.password" name="password" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="firstName" class="form-label">Imię:</label>
+      <input type="text" id="firstName" [(ngModel)]="newCustomer.firstName" name="firstName" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Nazwisko:</label>
+      <input type="text" id="lastName" [(ngModel)]="newCustomer.lastName" name="lastName" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj Klienta</button>
+  </form>
+  @if(successMessage)
+  {
+    <div class="alert alert-success mt-3">
+      {{ successMessage }}
+    </div>
+  }
+  @if(errorMessage)
+  {
+    <div class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+  }
+
+
+</div>

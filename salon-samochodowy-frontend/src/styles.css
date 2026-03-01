@@ -1,0 +1,17 @@
+.d-flex {
+    display: flex;
+    gap: 8px; 
+    flex-wrap: wrap; 
+  }
+  
+  button {
+    min-width: 120px; 
+    justify-content: center;
+  }
+  
+  @media (max-width: 576px) {
+    button {
+      flex: 1 1 100%; 
+    }
+  }
+  

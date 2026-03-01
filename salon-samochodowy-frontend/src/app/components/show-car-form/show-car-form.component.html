@@ -1,0 +1,91 @@
+<div class="add-car-form">
+  <h2>Dodaj Samochód</h2>
+  <form [formGroup]="showcarform" (ngSubmit)="addCar()">
+    <label for="brand">Marka</label>
+    <input
+      type="text"
+      id="brand"
+      formControlName="brand"
+      name="brand"
+    />
+    @if(showcarform.get('brand')?.invalid && (showcarform.get('brand')?.dirty || showcarform.get('brand')?.touched))
+    {
+      <p class="text-danger text-center">Marka jest wymagana</p>
+    }
+    <label for="model">Model</label>
+    <input
+      type="text"
+      id="model"
+      formControlName="model"
+      name="model"
+    />
+    @if(showcarform.get('model')?.invalid && (showcarform.get('model')?.dirty || showcarform.get('model')?.touched))
+    {
+      <p class="text-danger text-center">Model jest wymagana</p>
+    }
+    <label for="year">Rok</label>
+    <input
+      type="number"
+      id="year"
+      formControlName="year"
+      name="year"
+    />
+    @if(showcarform.get('year')?.invalid && (showcarform.get('year')?.dirty || showcarform.get('year')?.touched))
+    {
+      <p class="text-danger text-center">Błędny rok, min 1886</p>
+    }
+    <label for="vin">VIN</label>
+    <input
+      type="text"
+      id="vin"
+      formControlName="vin"
+      name="vin"
+    />
+    @if(showcarform.get('vin')?.invalid && (showcarform.get('vin')?.dirty || showcarform.get('vin')?.touched))
+    {
+      <p class="text-danger text-center">Błędny VIN, użyj tylko cyfr i dużych liter bez O oraz I</p>
+    }
+    <label for="price">Cena</label>
+    <input
+      type="number"
+      id="price"
+      formControlName="price"
+      name="price"
+    />
+    @if(showcarform.get('price')?.invalid && (showcarform.get('price')?.dirty || showcarform.get('price')?.touched))
+    {
+      <p class="text-danger text-center">Cena musi być liczbą dodatnią</p>
+    }
+    <label for="horsePower">Moc</label>
+    <input
+      type="number"
+      id="horsePower"
+      formControlName="horsePower"
+      name="horsePower"
+    />
+    @if(showcarform.get('horsePower')?.invalid && (showcarform.get('horsePower')?.dirty || showcarform.get('horsePower')?.touched))
+    {
+      <p class="text-danger text-center">Moc nie może być mniejsza od 1</p>
+    }
+    <label for="isAvailableForRent">
+      Dostępny do wynajmu
+      <input
+        type="checkbox"
+        id="isAvailableForRent"
+        formControlName="isAvailableForRent"
+        name="isAvailableForRent"
+      />
+    </label>
+    <label for="image">
+      Dodaj zdjęcie
+      <input type="file" (change)="onFileSelected($event)" id="image" />
+    </label>
+
+
+
+    <div class="add-car-form-buttons">
+      <button type="submit" [disabled]="showcarform.invalid">Zapisz</button>
+      <button type="button" mat-button (click)="closeDialog()">Zamknij</button>
+    </div>
+  </form>
+</div>

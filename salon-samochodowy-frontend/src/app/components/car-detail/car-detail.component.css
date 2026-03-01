@@ -1,0 +1,73 @@
+/* Ogólne stylowanie kontenera */
+div {
+    max-width: 600px;
+    margin: 20px auto; /* Centrowanie kontenera */
+    padding: 20px;
+    background-color: #f9f9f9; /* Jasnoszare tło */
+    border-radius: 8px; /* Zaokrąglenie narożników */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    font-family: 'Arial', sans-serif; /* Czytelna czcionka */
+  }
+  
+  /* Nagłówek */
+  h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333; /* Ciemnoszary kolor tekstu */
+    margin-bottom: 15px;
+    text-align: center; /* Centrowanie nagłówka */
+  }
+  
+  /* Styl dla paragrafów */
+  p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555; /* Średnioszary kolor tekstu */
+    margin: 8px 0;
+  }
+  
+  /* Mocne podkreślenie dla etykiet */
+  p strong {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Stylowanie cen */
+  p:last-of-type {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #27ae60; /* Zielony kolor dla ceny */
+    text-align: center;
+  }
+  
+  /* Dostępność wynajmu */
+  span.text-success {
+    color: #27ae60; /* Zielony kolor */
+    font-weight: bold;
+  }
+  
+  span.text-danger {
+    color: #e74c3c; /* Czerwony kolor */
+    font-weight: bold;
+  }
+  
+  /* Responsywność */
+  @media (max-width: 768px) {
+    div {
+      padding: 15px;
+      margin: 10px;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    p {
+      font-size: 0.9rem;
+    }
+  
+    p:last-of-type {
+      font-size: 1rem;
+    }
+  }
+  

@@ -1,0 +1,147 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary shadow-sm">
+  <div class="container-fluid">
+    <!-- Lewa strona: Logo lub nazwa firmy -->
+    <a
+      class="navbar-brand d-flex align-items-center"
+      href="#"
+    >
+      <!-- Ikona -->
+      <i
+        class="bi bi-car-front-fill me-2"
+        style="font-size: 1.5rem; color: #ffffff;"
+      ></i>
+      <span class="fw-bold" style="color: white;"
+        >Salon Samochodowy Angular Białystok</span
+      >
+    </a>
+
+    <!-- Przycisk hamburger na małych ekranach -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Przełącz nawigację"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Prawa strona: Przycisk logowania lub informacje o użytkowniku -->
+    <div class="d-flex align-items-center">
+      <!-- Przycisk "Customer List", "Add Customer" i "Add Car" widoczne tylko dla dealerów -->
+      @if(currentUser?.isDealer)
+      {
+          <button
+            class="btn btn-light me-2"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#customerListModal"
+          >
+            Lista Klientów
+          </button>
+          <button
+            class="btn btn-light me-2"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addCustomerModal"
+          >
+            Dodaj Klienta
+          </button>
+          <!-- Przycisk do dodawania samochodu -->
+          <button
+            class="btn btn-light me-2"
+            type="button"
+            (click)="openAddCarDialog()"
+          >
+            Dodaj Samochód
+          </button>
+      }
+
+      @if(!currentUser)
+      {
+          <button
+            class="btn btn-light me-2"
+            type="button"
+            (click)="openAuthModal()"
+          >
+            Zaloguj się
+          </button>
+      }
+      @if(currentUser)
+      {
+          <span class="me-3" style="color: white;"
+            >Witaj, {{ currentUser.firstName }}!</span
+          >
+          <button
+            class="btn btn-light"
+            type="button"
+            (click)="logout()"
+          >
+            Wyloguj się
+          </button>
+      }
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal dla Listy Klientów -->
+<div
+  class="modal fade"
+  id="customerListModal"
+  tabindex="-1"
+  aria-labelledby="customerListModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="customerListModalLabel">
+          Lista Klientów
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Zamknij"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-customer-list></app-customer-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal dla Dodawania Klienta -->
+<div
+  class="modal fade"
+  id="addCustomerModal"
+  tabindex="-1"
+  aria-labelledby="addCustomerModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCustomerModalLabel">
+          Dodaj Nowego Klienta
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Zamknij"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-add-customer></app-add-customer>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Komponent LoginRegisterComponent -->
+<app-login-register></app-login-register>

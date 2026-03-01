@@ -1,0 +1,886 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>salon-samochodowy-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">salon-samochodowy-frontend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Wprowadź tekst wyszukiwania"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfejsy</li>
+  <li class="breadcrumb-item"
+  >
+  LeasingResponse</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Plik</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/car.service.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Opis</h3>
+            </p>
+            <p class="comment">
+                <p>Interface reprezentujący odpowiedź na żądanie leasingowe.</p>
+
+            </p>
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Indeks</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Włąściwości</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#carBrand" 
+>
+                                            carBrand
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#carId" 
+>
+                                            carId
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#carModel" 
+>
+                                            carModel
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#downPayment" 
+>
+                                            downPayment
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#monthlyRate" 
+>
+                                            monthlyRate
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#months" 
+>
+                                            months
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#remainingAmount" 
+>
+                                            remainingAmount
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#totalPrice" 
+>
+                                            totalPrice
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Włąściwości</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="carBrand"></a>
+                                        <span class="name "><b>carBrand</b>
+                                            <a href="#carBrand">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>carBrand:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="carId"></a>
+                                        <span class="name "><b>carId</b>
+                                            <a href="#carId">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>carId:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="carModel"></a>
+                                        <span class="name "><b>carModel</b>
+                                            <a href="#carModel">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>carModel:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="downPayment"></a>
+                                        <span class="name "><b>downPayment</b>
+                                            <a href="#downPayment">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>downPayment:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="monthlyRate"></a>
+                                        <span class="name "><b>monthlyRate</b>
+                                            <a href="#monthlyRate">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>monthlyRate:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="months"></a>
+                                        <span class="name "><b>months</b>
+                                            <a href="#months">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>months:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="remainingAmount"></a>
+                                        <span class="name "><b>remainingAmount</b>
+                                            <a href="#remainingAmount">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>remainingAmount:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="totalPrice"></a>
+                                        <span class="name "><b>totalPrice</b>
+                                            <a href="#totalPrice">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>totalPrice:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, BehaviorSubject, of } from &#x27;rxjs&#x27;;
+import { HttpClient, HttpHeaders } from &#x27;@angular/common/http&#x27;;
+import { tap, catchError } from &#x27;rxjs/operators&#x27;;
+
+/**
+ * Interface reprezentująca samochód.
+ */
+export interface Car {
+  id: number;
+  brand: string;
+  model: string;
+  year: number;
+  vin: string;
+  price: number;
+  horsePower: number;
+  ownerId: number;
+  renterId: number;
+  isAvailableForRent: boolean;
+}
+
+/**
+ * Interface reprezentujący wypożyczającego samochód.
+ */
+export interface CarRenter {
+  carId: number;
+  renterId: number;
+}
+
+/**
+ * Interface reprezentujący żądanie leasingowe.
+ */
+export interface LeasingRequest {
+  downPayment: number;
+  months: number;
+}
+
+/**
+ * Interface reprezentujący odpowiedź na żądanie leasingowe.
+ */
+export interface LeasingResponse {
+  carId: number;
+  carBrand: string;
+  carModel: string;
+  totalPrice: number;
+  downPayment: number;
+  remainingAmount: string;
+  months: number;
+  monthlyRate: string;
+}
+
+/**
+ * CarService zarządza operacjami związanymi z samochodami, takimi jak pobieranie, dodawanie, edytowanie, usuwanie, wypożyczanie, zwracanie, leasingowanie i zakup samochodów.
+ *
+ * @injectable
+ */
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class CarService {
+  /**
+   * URL do backendu API dla operacji związanych z samochodami.
+   * Można rozważyć przeniesienie tego do pliku konfiguracyjnego.
+   * @type {string}
+   */
+  private apiUrl: string &#x3D; &#x27;http://localhost:3000/cars&#x27;;
+  
+  /**
+   * BehaviorSubject przechowujący bieżącą listę samochodów.
+   * Inicjalizowany jest jako pusta tablica.
+   * @type {BehaviorSubject&lt;Car[]&gt;}
+   */
+  private carsSubject: BehaviorSubject&lt;Car[]&gt; &#x3D; new BehaviorSubject&lt;Car[]&gt;([]);
+  
+  /**
+   * Observable emitujący zmiany listy samochodów.
+   * @type {Observable&lt;Car[]&gt;}
+   */
+  public cars$: Observable&lt;Car[]&gt; &#x3D; this.carsSubject.asObservable();
+
+  /**
+   * Konstruktor serwisu CarService.
+   *
+   * @param {HttpClient} http - Serwis HttpClient do wykonywania żądań HTTP.
+   */
+  constructor(private http: HttpClient) { 
+    this.loadInitialData();
+  }
+
+  /**
+   * Metoda ładowania początkowych danych samochodów z backendu.
+   * Aktualizuje BehaviorSubject &#x60;carsSubject&#x60; z pobranymi danymi.
+   */
+  private loadInitialData(): void {
+    this.http.get&lt;Car[]&gt;(this.apiUrl, { withCredentials: true })
+      .pipe(
+        catchError(error &#x3D;&gt; {
+          console.error(&#x27;Error loading cars:&#x27;, error);
+          return of([]); // Zwraca pustą tablicę w przypadku błędu
+        })
+      )
+      .subscribe(
+        (cars) &#x3D;&gt; this.carsSubject.next(cars)
+      );
+  }
+
+  /**
+   * Pobiera listę wszystkich samochodów.
+   *
+   * @returns {Observable&lt;Car[]&gt;} Observable emitujący listę samochodów.
+   */
+  getCars(): Observable&lt;Car[]&gt; {
+    return this.cars$;
+  }
+
+  /**
+   * Pobiera szczegółowe informacje o samochodzie na podstawie jego identyfikatora.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu.
+   * @returns {Observable&lt;Car&gt;} Observable emitujący szczegółowe informacje o samochodzie.
+   */
+  getCar(carId: number): Observable&lt;Car&gt; {
+    return this.http.get&lt;Car&gt;(&#x60;${this.apiUrl}/${carId}&#x60;, { withCredentials: true })
+      .pipe(
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error fetching car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Dodaje nowy samochód do systemu.
+   *
+   * @param {Car} newCar - Obiekt reprezentujący nowy samochód.
+   * @returns {Observable&lt;Car&gt;} Observable emitujący dodany samochód.
+   */
+  addCar(newCar: Car): Observable&lt;Car&gt; {
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.post&lt;Car&gt;(this.apiUrl, newCar, { headers, withCredentials: true })
+      .pipe(
+        tap((car: Car) &#x3D;&gt; {
+          const currentCars &#x3D; this.carsSubject.getValue();
+          this.carsSubject.next([...currentCars, car]);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x27;Error adding car:&#x27;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Aktualizuje informacje o istniejącym samochodzie.
+   *
+   * @param {number} id - Unikalny identyfikator samochodu do aktualizacji.
+   * @param {Car} updatedCar - Obiekt reprezentujący zaktualizowane informacje o samochodzie.
+   * @returns {Observable&lt;Car&gt;} Observable emitujący zaktualizowany samochód.
+   */
+  updateCar(id: number, updatedCar: Car): Observable&lt;Car&gt; {
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.put&lt;Car&gt;(&#x60;${this.apiUrl}/${id}&#x60;, updatedCar, { headers, withCredentials: true })
+      .pipe(
+        tap((car: Car) &#x3D;&gt; {
+          const currentCars &#x3D; this.carsSubject.getValue();
+          const index &#x3D; currentCars.findIndex(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; id);
+          if (index !&#x3D;&#x3D; -1) {
+            currentCars[index] &#x3D; car;
+            this.carsSubject.next([...currentCars]);
+          }
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error updating car with ID ${id}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Usuwa samochód z systemu na podstawie jego identyfikatora.
+   *
+   * @param {number} id - Unikalny identyfikator samochodu do usunięcia.
+   * @returns {Observable&lt;void&gt;} Observable emitujący &#x60;void&#x60; po zakończeniu operacji.
+   */
+  deleteCar(id: number): Observable&lt;void&gt; {
+    return this.http.delete&lt;void&gt;(&#x60;${this.apiUrl}/${id}&#x60;, { withCredentials: true })
+      .pipe(
+        tap(() &#x3D;&gt; {
+          const currentCars &#x3D; this.carsSubject.getValue();
+          const updatedCars &#x3D; currentCars.filter(car &#x3D;&gt; car.id !&#x3D;&#x3D; id);
+          this.carsSubject.next(updatedCars);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error deleting car with ID ${id}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Wypożycza samochód na podstawie jego identyfikatora.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu do wypożyczenia.
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź serwera.
+   */
+  rentCar(carId: number): Observable&lt;any&gt; {
+    const url &#x3D; &#x60;${this.apiUrl}/${carId}/rent&#x60;;
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.post(url, {}, { headers, withCredentials: true })
+      .pipe(
+        tap(() &#x3D;&gt; {
+          this.refreshCar(carId);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error renting car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Zwraca wypożyczony samochód na podstawie jego identyfikatora.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu do zwrotu.
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź serwera.
+   */
+  returnCar(carId: number): Observable&lt;any&gt; {
+    const url &#x3D; &#x60;${this.apiUrl}/${carId}/return&#x60;;
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.post(url, {}, { headers, withCredentials: true })
+      .pipe(
+        tap(() &#x3D;&gt; {
+          this.refreshCar(carId);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error returning car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Pobiera identyfikator wypożyczającego samochód na podstawie jego identyfikatora.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu.
+   * @returns {Observable&lt;CarRenter&gt;} Observable emitujący identyfikator wypożyczającego.
+   */
+  getRenterId(carId: number): Observable&lt;CarRenter&gt; {
+    const url &#x3D; &#x60;${this.apiUrl}/${carId}/renter&#x60;;
+    return this.http.get&lt;CarRenter&gt;(url, { withCredentials: true })
+      .pipe(
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error fetching renter for car ID ${carId}:&#x60;, error);
+          return of({ carId, renterId: 0 } as CarRenter); // Można dostosować obsługę błędów
+        })
+      );
+  }  
+
+  /**
+   * Tworzy leasing dla samochodu na podstawie jego identyfikatora i danych leasingowych.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu.
+   * @param {LeasingRequest} leasingData - Dane dotyczące leasingu.
+   * @returns {Observable&lt;LeasingResponse&gt;} Observable emitujący odpowiedź na żądanie leasingowe.
+   */
+  leaseCar(carId: number, leasingData: LeasingRequest): Observable&lt;LeasingResponse&gt; {
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.post&lt;LeasingResponse&gt;(&#x60;${this.apiUrl}/${carId}/leasing&#x60;, leasingData, { headers, withCredentials: true })
+      .pipe(
+        tap(() &#x3D;&gt; {
+          this.refreshCar(carId);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error leasing car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Kupuje samochód na podstawie jego identyfikatora.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu do zakupu.
+   * @returns {Observable&lt;any&gt;} Observable emitujący odpowiedź serwera.
+   */
+  buyCar(carId: number): Observable&lt;any&gt; {
+    const url &#x3D; &#x60;${this.apiUrl}/${carId}/buy&#x60;; // Endpoint for buying
+    const headers &#x3D; new HttpHeaders({ &#x27;Content-Type&#x27;: &#x27;application/json&#x27; });
+    return this.http.post(url, {}, { headers, withCredentials: true })
+      .pipe(
+        tap(() &#x3D;&gt; {
+          this.refreshCar(carId);
+        }),
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error buying car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      );
+  }
+
+  /**
+   * Pomocnicza metoda do odświeżania danych pojedynczego samochodu po operacjach takich jak wypożyczenie, zwrot, leasing czy zakup.
+   *
+   * @param {number} carId - Unikalny identyfikator samochodu do odświeżenia.
+   */
+  private refreshCar(carId: number): void {
+    this.http.get&lt;Car&gt;(&#x60;${this.apiUrl}/${carId}&#x60;, { withCredentials: true })
+      .pipe(
+        catchError(error &#x3D;&gt; {
+          console.error(&#x60;Error refreshing car with ID ${carId}:&#x60;, error);
+          return of(null as any); // Można dostosować obsługę błędów
+        })
+      )
+      .subscribe(
+        (updatedCar) &#x3D;&gt; {
+          if (updatedCar) {
+            const currentCars &#x3D; this.carsSubject.getValue();
+            const index &#x3D; currentCars.findIndex(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; carId);
+            if (index !&#x3D;&#x3D; -1) {
+              currentCars[index] &#x3D; updatedCar;
+              this.carsSubject.next([...currentCars]);
+            }
+          }
+        }
+      );
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> pasujących wyników "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">Brak pasujących wyników "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'LeasingResponse.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

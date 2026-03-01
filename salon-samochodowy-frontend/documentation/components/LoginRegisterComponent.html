@@ -1,0 +1,1244 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>salon-samochodowy-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">salon-samochodowy-frontend documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Wprowadź tekst wyszukiwania"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Komponenty</li>
+  <li class="breadcrumb-item"
+  >
+  LoginRegisterComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Plik</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/login-register/login-register.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Opis</h3>
+    </p>
+    <p class="comment">
+        <p>LoginRegisterComponent umożliwia użytkownikom logowanie oraz rejestrację w aplikacji.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implementuje</h3>
+    </p>
+    <p class="comment">
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadane</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-login-register</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>FormsModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./login-register.component.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./login-register.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Indeks</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Włąściwości</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#destroy$" >destroy$</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage" >errorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#firstName" >firstName</a>
+                            </li>
+                            <li>
+                                <a href="#isLoginMode" >isLoginMode</a>
+                            </li>
+                            <li>
+                                <a href="#lastName" >lastName</a>
+                            </li>
+                            <li>
+                                <a href="#password" >password</a>
+                            </li>
+                            <li>
+                                <a href="#successMessage" >successMessage</a>
+                            </li>
+                            <li>
+                                <a href="#username" >username</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Metody</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#closeModal" >closeModal</a>
+                            </li>
+                            <li>
+                                <a href="#logout" >logout</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit" >onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#toggleMode" >toggleMode</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Konstruktor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authService: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, router: Router)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="70" class="link-to-prism">src/app/components/login-register/login-register.component.ts:70</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Konstruktor komponentu.</p>
+</div>
+                            <div>
+                                    <b>Parametry :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nazwa</td>
+                                                    <td>Typ</td>
+                                                <td>Opcjonalne</td>
+                                                    <td>Opis</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            Nie
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>Serwis do uwierzytelniania użytkowników.</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            Nie
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>Serwis do nawigacji między trasami.</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Metody
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeModal"></a>
+                    <span class="name">
+                        <span ><b>closeModal</b></span>
+                        <a href="#closeModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closeModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="166"
+                                    class="link-to-prism">src/app/components/login-register/login-register.component.ts:166</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda zamykająca modal z formularzem logowania lub rejestracji.
+Resetuje wszystkie pola formularza oraz komunikaty o błędach i sukcesie.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logout"></a>
+                    <span class="name">
+                        <span ><b>logout</b></span>
+                        <a href="#logout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>logout()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="148"
+                                    class="link-to-prism">src/app/components/login-register/login-register.component.ts:148</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda wylogowująca aktualnie zalogowanego użytkownika.
+Po wylogowaniu, przekierowuje użytkownika na stronę główną.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="186"
+                                    class="link-to-prism">src/app/components/login-register/login-register.component.ts:186</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda czyszcząca subskrypcje przy niszczeniu komponentu, aby zapobiec wyciekom pamięci.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <span ><b>onSubmit</b></span>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="103"
+                                    class="link-to-prism">src/app/components/login-register/login-register.component.ts:103</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda obsługująca przesłanie formularza logowania lub rejestracji.
+W zależności od trybu, wywołuje odpowiednie metody serwisu AuthenticationService.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleMode"></a>
+                    <span class="name">
+                        <span ><b>toggleMode</b></span>
+                        <a href="#toggleMode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleMode()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Zdefiniowane w <a href="" data-line="93"
+                                    class="link-to-prism">src/app/components/login-register/login-register.component.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Metoda przełączająca tryb między logowaniem a rejestracją.
+Resetuje komunikaty o błędach i sukcesie przy każdej zmianie trybu.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Zwraca : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Włąściwości
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="destroy$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>destroy$</b></span>
+                        <a href="#destroy$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>    <code>Subject&lt;void&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>new Subject&lt;void&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="70" class="link-to-prism">src/app/components/login-register/login-register.component.ts:70</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Subject używany do zarządzania subskrypcjami i zapobiegania wyciekom pamięci.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMessage"></a>
+                    <span class="name">
+                        <span ><b>errorMessage</b></span>
+                        <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="58" class="link-to-prism">src/app/components/login-register/login-register.component.ts:58</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Komunikat o błędzie występującym podczas logowania lub rejestracji.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="firstName"></a>
+                    <span class="name">
+                        <span ><b>firstName</b></span>
+                        <a href="#firstName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="46" class="link-to-prism">src/app/components/login-register/login-register.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Imię użytkownika wpisane podczas rejestracji.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoginMode"></a>
+                    <span class="name">
+                        <span ><b>isLoginMode</b></span>
+                        <a href="#isLoginMode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="28" class="link-to-prism">src/app/components/login-register/login-register.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Flaga określająca, czy komponent jest w trybie logowania.
+Jeśli ustawiona na <code>true</code>, formularz umożliwia logowanie. Jeśli na <code>false</code>, rejestrację.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lastName"></a>
+                    <span class="name">
+                        <span ><b>lastName</b></span>
+                        <a href="#lastName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="52" class="link-to-prism">src/app/components/login-register/login-register.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Nazwisko użytkownika wpisane podczas rejestracji.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="password"></a>
+                    <span class="name">
+                        <span ><b>password</b></span>
+                        <a href="#password"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="40" class="link-to-prism">src/app/components/login-register/login-register.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Hasło użytkownika wpisane w formularzu.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="successMessage"></a>
+                    <span class="name">
+                        <span ><b>successMessage</b></span>
+                        <a href="#successMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="64" class="link-to-prism">src/app/components/login-register/login-register.component.ts:64</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Komunikat o sukcesie podczas logowania lub rejestracji.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="username"></a>
+                    <span class="name">
+                        <span ><b>username</b></span>
+                        <a href="#username"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Typ : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Domyślna wartość : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Zdefiniowane w <a href="" data-line="34" class="link-to-prism">src/app/components/login-register/login-register.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Nazwa użytkownika wpisana w formularzu.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnDestroy } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;; // Import CommonModule
+import { FormsModule } from &#x27;@angular/forms&#x27;; // Import FormsModule
+import { Router } from &#x27;@angular/router&#x27;;
+import { AuthenticationService } from &#x27;../../services/authentication.service&#x27;;
+import { Subject } from &#x27;rxjs&#x27;;
+import { takeUntil } from &#x27;rxjs/operators&#x27;;
+
+/**
+ * LoginRegisterComponent umożliwia użytkownikom logowanie oraz rejestrację w aplikacji.
+ *
+ * @component
+ */
+@Component({
+  selector: &#x27;app-login-register&#x27;,
+  standalone: true, // Dodaj standalone: true
+  imports: [CommonModule, FormsModule], // Dodaj imports
+  templateUrl: &#x27;./login-register.component.html&#x27;,
+  styleUrls: [&#x27;./login-register.component.css&#x27;]
+})
+export class LoginRegisterComponent implements OnDestroy {
+  
+  /**
+   * Flaga określająca, czy komponent jest w trybie logowania.
+   * Jeśli ustawiona na &#x60;true&#x60;, formularz umożliwia logowanie. Jeśli na &#x60;false&#x60;, rejestrację.
+   * @type {boolean}
+   */
+  isLoginMode: boolean &#x3D; true;
+  
+  /**
+   * Nazwa użytkownika wpisana w formularzu.
+   * @type {string}
+   */
+  username: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Hasło użytkownika wpisane w formularzu.
+   * @type {string}
+   */
+  password: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Imię użytkownika wpisane podczas rejestracji.
+   * @type {string}
+   */
+  firstName: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Nazwisko użytkownika wpisane podczas rejestracji.
+   * @type {string}
+   */
+  lastName: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Komunikat o błędzie występującym podczas logowania lub rejestracji.
+   * @type {string}
+   */
+  errorMessage: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Komunikat o sukcesie podczas logowania lub rejestracji.
+   * @type {string}
+   */
+  successMessage: string &#x3D; &#x27;&#x27;;
+  
+  /**
+   * Subject używany do zarządzania subskrypcjami i zapobiegania wyciekom pamięci.
+   * @type {Subject&lt;void&gt;}
+   */
+  private destroy$: Subject&lt;void&gt; &#x3D; new Subject&lt;void&gt;();
+
+  /**
+   * Konstruktor komponentu.
+   *
+   * @param {AuthenticationService} authService - Serwis do uwierzytelniania użytkowników.
+   * @param {Router} router - Serwis do nawigacji między trasami.
+   */
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
+
+  /**
+   * Metoda inicjalizująca komponent.
+   * Nie jest wymagana implementacja OnInit, ponieważ logika inicjalizacji jest prosta.
+   */
+  // ngOnInit nie jest potrzebne, ponieważ inicjalizacja odbywa się w konstruktorze i metodach.
+
+  /**
+   * Metoda przełączająca tryb między logowaniem a rejestracją.
+   * Resetuje komunikaty o błędach i sukcesie przy każdej zmianie trybu.
+   */
+  toggleMode(): void {
+    this.isLoginMode &#x3D; !this.isLoginMode;
+    this.errorMessage &#x3D; &#x27;&#x27;;
+    this.successMessage &#x3D; &#x27;&#x27;;
+  }
+
+  /**
+   * Metoda obsługująca przesłanie formularza logowania lub rejestracji.
+   * W zależności od trybu, wywołuje odpowiednie metody serwisu AuthenticationService.
+   */
+  onSubmit(): void {
+    if (this.isLoginMode) {
+      this.authService.login(this.username, this.password)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) &#x3D;&gt; {
+            this.successMessage &#x3D; response.message;
+            this.closeModal();
+            // Przekierowanie po zalogowaniu
+            this.router.navigate([&#x27;/&#x27;]);
+          },
+          error: (error) &#x3D;&gt; {
+            this.errorMessage &#x3D; error.error.error || &#x27;Błąd logowania&#x27;;
+          }
+        });
+    } else {
+      this.authService.register(this.username, this.password, this.firstName, this.lastName)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) &#x3D;&gt; {
+            this.successMessage &#x3D; response.message;
+            this.closeModal();
+            // Opcjonalne automatyczne logowanie po rejestracji
+            this.authService.login(this.username, this.password)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: () &#x3D;&gt; {
+                  this.router.navigate([&#x27;/&#x27;]);
+                },
+                error: (error) &#x3D;&gt; {
+                  this.errorMessage &#x3D; error.error.error || &#x27;Błąd logowania po rejestracji&#x27;;
+                }
+              });
+          },
+          error: (error) &#x3D;&gt; {
+            this.errorMessage &#x3D; error.error.error || &#x27;Błąd rejestracji&#x27;;
+          }
+        });
+    }
+  }
+
+  /**
+   * Metoda wylogowująca aktualnie zalogowanego użytkownika.
+   * Po wylogowaniu, przekierowuje użytkownika na stronę główną.
+   */
+  logout(): void {
+    this.authService.logout()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () &#x3D;&gt; {
+          // Aktualizacja stanu aplikacji po wylogowaniu
+          this.router.navigate([&#x27;/&#x27;]);
+        },
+        error: () &#x3D;&gt; {
+          this.errorMessage &#x3D; &#x27;Nie udało się wylogować.&#x27;;
+        }
+      });
+  }
+
+  /**
+   * Metoda zamykająca modal z formularzem logowania lub rejestracji.
+   * Resetuje wszystkie pola formularza oraz komunikaty o błędach i sukcesie.
+   */
+  closeModal(): void {
+    const modalElement &#x3D; document.getElementById(&#x27;authModal&#x27;);
+    if (modalElement) {
+      const modal &#x3D; (window as any).bootstrap.Modal.getInstance(modalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
+    // Resetowanie formularza
+    this.username &#x3D; &#x27;&#x27;;
+    this.password &#x3D; &#x27;&#x27;;
+    this.firstName &#x3D; &#x27;&#x27;;
+    this.lastName &#x3D; &#x27;&#x27;;
+    this.errorMessage &#x3D; &#x27;&#x27;;
+    this.successMessage &#x3D; &#x27;&#x27;;
+  }
+
+  /**
+   * Metoda czyszcząca subskrypcje przy niszczeniu komponentu, aby zapobiec wyciekom pamięci.
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;modal fade&quot; id&#x3D;&quot;authModal&quot; tabindex&#x3D;&quot;-1&quot; aria-labelledby&#x3D;&quot;authModalLabel&quot; aria-hidden&#x3D;&quot;true&quot;&gt;
+  &lt;div class&#x3D;&quot;modal-dialog&quot;&gt;
+    &lt;div class&#x3D;&quot;modal-content&quot;&gt;
+      &lt;div class&#x3D;&quot;modal-header&quot;&gt;
+        &lt;h1 class&#x3D;&quot;modal-title fs-5&quot; id&#x3D;&quot;authModalLabel&quot;&gt;
+          {{ isLoginMode ? &#x27;Logowanie&#x27; : &#x27;Rejestracja&#x27; }}
+        &lt;/h1&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn-close&quot; data-bs-dismiss&#x3D;&quot;modal&quot; aria-label&#x3D;&quot;Zamknij&quot;&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;modal-body&quot;&gt;
+        &lt;form (ngSubmit)&#x3D;&quot;onSubmit()&quot;&gt;
+          &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+            &lt;label for&#x3D;&quot;username&quot; class&#x3D;&quot;form-label&quot;&gt;Nazwa użytkownika&lt;/label&gt;
+            &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;username&quot; [(ngModel)]&#x3D;&quot;username&quot; name&#x3D;&quot;username&quot; required&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+            &lt;label for&#x3D;&quot;password&quot; class&#x3D;&quot;form-label&quot;&gt;Hasło&lt;/label&gt;
+            &lt;input type&#x3D;&quot;password&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;password&quot; [(ngModel)]&#x3D;&quot;password&quot; name&#x3D;&quot;password&quot; required&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;!isLoginMode&quot;&gt;
+            &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+              &lt;label for&#x3D;&quot;firstName&quot; class&#x3D;&quot;form-label&quot;&gt;Imię&lt;/label&gt;
+              &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;firstName&quot; [(ngModel)]&#x3D;&quot;firstName&quot; name&#x3D;&quot;firstName&quot; required&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;mb-3&quot;&gt;
+              &lt;label for&#x3D;&quot;lastName&quot; class&#x3D;&quot;form-label&quot;&gt;Nazwisko&lt;/label&gt;
+              &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;lastName&quot; [(ngModel)]&#x3D;&quot;lastName&quot; name&#x3D;&quot;lastName&quot; required&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;errorMessage&quot; class&#x3D;&quot;alert alert-danger&quot;&gt;
+            {{ errorMessage }}
+          &lt;/div&gt;
+          &lt;div *ngIf&#x3D;&quot;successMessage&quot; class&#x3D;&quot;alert alert-success&quot;&gt;
+            {{ successMessage }}
+          &lt;/div&gt;
+
+          &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn btn-primary w-100&quot;&gt;
+            {{ isLoginMode ? &#x27;Zaloguj się&#x27; : &#x27;Zarejestruj się&#x27; }}
+          &lt;/button&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;modal-footer&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-link&quot; (click)&#x3D;&quot;toggleMode()&quot;&gt;
+          {{ isLoginMode ? &#x27;Nie masz konta? Zarejestruj się&#x27; : &#x27;Masz już konto? Zaloguj się&#x27; }}
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./login-register.component.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Komponent</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element z dyrektywą</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">  <div class="modal-dialog">    <div class="modal-content">      <div class="modal-header">        <h1 class="modal-title fs-5" id="authModalLabel">          {{ isLoginMode ? \'Logowanie\' : \'Rejestracja\' }}        </h1>        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>      </div>      <div class="modal-body">        <form (ngSubmit)="onSubmit()">          <div class="mb-3">            <label for="username" class="form-label">Nazwa użytkownika</label>            <input type="text" class="form-control" id="username" [(ngModel)]="username" name="username" required>          </div>          <div class="mb-3">            <label for="password" class="form-label">Hasło</label>            <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required>          </div>          <div *ngIf="!isLoginMode">            <div class="mb-3">              <label for="firstName" class="form-label">Imię</label>              <input type="text" class="form-control" id="firstName" [(ngModel)]="firstName" name="firstName" required>            </div>            <div class="mb-3">              <label for="lastName" class="form-label">Nazwisko</label>              <input type="text" class="form-control" id="lastName" [(ngModel)]="lastName" name="lastName" required>            </div>          </div>          <div *ngIf="errorMessage" class="alert alert-danger">            {{ errorMessage }}          </div>          <div *ngIf="successMessage" class="alert alert-success">            {{ successMessage }}          </div>          <button type="submit" class="btn btn-primary w-100">            {{ isLoginMode ? \'Zaloguj się\' : \'Zarejestruj się\' }}          </button>        </form>      </div>      <div class="modal-footer">        <button type="button" class="btn btn-link" (click)="toggleMode()">          {{ isLoginMode ? \'Nie masz konta? Zarejestruj się\' : \'Masz już konto? Zaloguj się\' }}        </button>      </div>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AddCarComponent', 'selector': 'app-add-car'},{'name': 'AddCustomerComponent', 'selector': 'app-add-customer'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuyCarComponent', 'selector': 'app-buy-car'},{'name': 'CalculateLeasingComponent', 'selector': 'calculate-leasing'},{'name': 'CarDetailComponent', 'selector': 'app-car-detail'},{'name': 'CarListComponent', 'selector': 'app-car-list'},{'name': 'CustomerListComponent', 'selector': 'app-customer-list'},{'name': 'EditCarComponent', 'selector': 'edit-car'},{'name': 'LoginRegisterComponent', 'selector': 'app-login-register'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'RentCarComponent', 'selector': 'app-rent-car'},{'name': 'ShowCarForm', 'selector': 'show-car-form'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'LoginRegisterComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> pasujących wyników "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">Brak pasujących wyników "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'LoginRegisterComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

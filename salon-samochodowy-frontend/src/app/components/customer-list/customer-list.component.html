@@ -1,0 +1,38 @@
+<div class="customer-list">
+  <h2>Lista Klientów</h2>
+    @if(error)
+    {
+      <div class="error">
+        {{ error }}
+      </div>
+    }
+  @if(customers.length > 0)
+  {
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Imię</th>
+          <th>Nazwisko</th>
+          <th>Dealer</th>
+        </tr>
+      </thead>
+      <tbody>
+          @for(customer of customers; track customer.id)
+          {
+            <tr>
+              <td>{{ customer.id }}</td>
+              <td>{{ customer.username }}</td>
+              <td>{{ customer.firstName }}</td>
+              <td>{{ customer.lastName }}</td>
+              <td>{{ customer.isDealer }}</td>
+            </tr>
+          }
+      </tbody>
+    </table>
+  }
+  <ng-template #noCustomers>
+    <p>Brak klientów do wyświetlenia.</p>
+  </ng-template>
+</div>

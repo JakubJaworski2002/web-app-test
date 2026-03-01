@@ -1,0 +1,28 @@
+.add-customer {
+    margin: 20px 0;
+  }
+  
+  .add-customer form div {
+    margin-bottom: 10px;
+  }
+  
+  .add-customer label {
+    display: inline-block;
+    width: 100px;
+  }
+  
+  .add-customer input {
+    padding: 5px;
+    width: 200px;
+  }
+  
+  .success {
+    color: green;
+    margin-top: 10px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  

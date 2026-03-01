@@ -1,0 +1,47 @@
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-subtitle {
+    font-size: 1rem;
+  }
+
+  .btn-disabled {
+    background-color: #d6d6d6;
+    color: #999999;
+    border-color: #d6d6d6;
+    cursor: not-allowed;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+.button-box {
+  display: grid;
+  grid-auto-flow: column; /* Ustaw elementy w jednej kolumnie */
+  gap: 10px; /* Odstępy między elementami */
+  align-items: center; /* Wyrównanie w pionie */
+}
+
+/* footer.component.css */
+
+footer {
+  text-align: center; /* Wycentrowanie zawartości poziomo */
+  padding: 20px 0; /* Dodanie odstępów góra-dół */
+  background-color: #f8f9fa; /* Opcjonalny kolor tła */
+}
+
+footer a {
+  text-decoration: none; /* Usunięcie podkreślenia linku */
+  color: #007bff; /* Kolor linku */
+  font-size: 16px; /* Rozmiar czcionki */
+}
+
+footer a:hover {
+  text-decoration: underline; /* Podkreślenie na hover */
+}
+
+
