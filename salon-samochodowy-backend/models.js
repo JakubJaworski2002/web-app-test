@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Sequelize } from 'sequelize';
 
 /**
@@ -14,10 +17,67 @@ import { Sequelize } from 'sequelize';
  * @apiParam {string} host Adres hosta bazy danych
  * @apiParam {string} dialect Dialekt bazy danych (np. 'mysql')
  */
-const sequelize = new Sequelize('salon_samochodowy', 'root', 'Admin', {
-    host: 'localhost',
-    dialect: 'mysql', 
-});
+const mysqlConfig = {
+    database: process.env.DB_NAME || 'salon_samochodowy',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Admin',
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+};
+
+const currentFilePath = fileURLToPath(import.meta.url);
+const currentDirPath = path.dirname(currentFilePath);
+const sqliteStoragePath = process.env.SQLITE_STORAGE || path.join(currentDirPath, 'data', 'salon-samochodowy.sqlite');
+
+const createMySqlSequelize = () => new Sequelize(
+    mysqlConfig.database,
+    mysqlConfig.username,
+    mysqlConfig.password,
+    {
+        host: mysqlConfig.host,
+        port: mysqlConfig.port,
+        dialect: 'mysql',
+        logging: false,
+    }
+);
+
+const createSqliteSequelize = () => {
+    const sqliteDir = path.dirname(sqliteStoragePath);
+    if (!fs.existsSync(sqliteDir)) {
+        fs.mkdirSync(sqliteDir, { recursive: true });
+    }
+
+    return new Sequelize({
+        dialect: 'sqlite',
+        storage: sqliteStoragePath,
+        logging: false,
+    });
+};
+
+const createSequelizeWithFallback = async () => {
+    const mysqlSequelize = createMySqlSequelize();
+
+    try {
+        await mysqlSequelize.authenticate();
+        console.log('Połączono z bazą MySQL.');
+        return mysqlSequelize;
+    } catch (mysqlError) {
+        console.error('Nie udało się połączyć z MySQL. Przełączanie na SQLite.', mysqlError.message);
+
+        try {
+            await mysqlSequelize.close();
+        } catch (closeError) {
+            console.error('Nie udało się zamknąć połączenia MySQL:', closeError.message);
+        }
+
+        const sqliteSequelize = createSqliteSequelize();
+        await sqliteSequelize.authenticate();
+        console.log(`Połączono z bazą SQLite: ${sqliteStoragePath}`);
+        return sqliteSequelize;
+    }
+};
+
+const sequelize = await createSequelizeWithFallback();
 
 /**
  * @api {model} Car Model samochodu
@@ -144,10 +204,11 @@ Car.belongsTo(User, { as: 'renter', foreignKey: 'renterId' });
  * @apiSuccess {string} message Komunikat o pomyślnej synchronizacji
  * @apiError {Error} error Błąd podczas synchronizacji bazy danych
  */
-(async () => {
-    await sequelize.sync({ alter: true })
-        .then(() => console.log('Database synchronized'))
-        .catch(err => console.error('Database synchronization error:', err));
-})();
+try {
+    await sequelize.sync({ alter: true });
+    console.log('Database synchronized');
+} catch (err) {
+    console.error('Database synchronization error:', err);
+}
 
 export { sequelize, Car, User };

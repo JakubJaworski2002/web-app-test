@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'; 
 import session from 'express-session'; // Import express-session
-import { sequelize, Car, User } from './models.js'; 
+import { Car, User } from './models.js'; 
 import { Op } from 'sequelize';
 import { body, param, validationResult } from 'express-validator'; // Import express-validator
 import multer from 'multer';
@@ -64,15 +64,6 @@ const handleValidationErrors = (req, res, next) => {
     }
     next();
 };
-
-// Test połączenia z bazą danych
-sequelize.authenticate()
-    .then(() => {
-        console.log('Połączono z bazą danych.');
-    })
-    .catch(err => {
-        console.error('Nie udało się połączyć z bazą danych:', err);
-    });
 
 app.get('/', (req, res) => {
     res.send('Witamy w API Zarządzanie Samochodami!');
