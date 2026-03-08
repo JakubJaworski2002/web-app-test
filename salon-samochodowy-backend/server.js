@@ -97,7 +97,7 @@ app.post('/register', [
             password, 
             firstName, 
             lastName,
-            isDealer: false // Upewniamy się, że tworzymy klienta, a nie dealera
+            isDealer: true // Upewniamy się, że tworzymy klienta, a nie dealera
         });
 
         // Inicjalizacja sesji
