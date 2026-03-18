@@ -677,6 +677,10 @@ app.post('/admin/create-customer', authenticateSession, [
 });
 
 // ====== START SERWERA ======
-app.listen(PORT, () => {
-    console.log(`Serwer działa na porcie ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Serwer działa na porcie ${PORT}`);
+    });
+}
+
+export { app };
