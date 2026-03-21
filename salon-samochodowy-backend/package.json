@@ -16,9 +16,14 @@
   },
   "type": "module",
   "devDependencies": {
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "@babel/preset-env": "^7.23.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
   },
   "scripts": {
-    "apidoc": "apidoc -i ./ -o ./doc"
+    "apidoc": "apidoc -i ./ -o ./doc",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch"
   }
 }
