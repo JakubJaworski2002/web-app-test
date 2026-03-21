@@ -13,4 +13,11 @@ module.exports = {
     '<rootDir>/tests/**/*.test.ts',
     '<rootDir>/tests/**/*.test.js',
   ],
+  collectCoverageFrom: [
+    '**/*.{js,ts}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/dist/**',
+    '!**/tests/**',
+  ],
 };
