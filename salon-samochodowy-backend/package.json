@@ -16,18 +16,19 @@
   },
   "type": "module",
   "devDependencies": {
+    "@jest/globals": "^30.3.0",
+    "jest": "^30.3.0",
+    "sequelize-cli": "^6.6.2",
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.0",
     "@types/jest": "^30.0.0",
     "@types/supertest": "^7.2.0",
     "babel-jest": "^30.3.0",
-    "jest": "^30.3.0",
-    "sequelize-cli": "^6.6.2",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6"
   },
   "scripts": {
-    "test": "jest",
-    "apidoc": "apidoc -i ./ -o ./doc"
+    "apidoc": "apidoc -i ./ -o ./doc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   }
 }
