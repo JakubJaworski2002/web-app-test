@@ -646,3 +646,5 @@ app.post('/admin/create-customer', authenticateSession, [
 app.listen(PORT, () => {
     console.log(`Serwer działa na porcie ${PORT}`);
 });
+
+export { app };
