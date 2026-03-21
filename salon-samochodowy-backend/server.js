@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors'; 
+import cors from 'cors';
 import session from 'express-session'; // Import express-session
-import { Car, User } from './models.js'; 
+import { Car, User } from './models.js';
 import { Op } from 'sequelize';
 import { body, param, validationResult } from 'express-validator'; // Import express-validator
 import multer from 'multer';
@@ -30,9 +30,9 @@ app.use(bodyParser.json());
 
 // Konfiguracja CORS
 app.use(cors({
-  origin: 'http://localhost:4200', 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, 
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }));
 
 // Konfiguracja sesji
@@ -40,7 +40,7 @@ app.use(session({
     secret: 'TwojSuperTajnyKlucz', // Powinno być przechowywane w zmiennych środowiskowych
     resave: false,
     saveUninitialized: false,
-    cookie: { 
+    cookie: {
         secure: false, // Ustaw na true, jeśli używasz HTTPS
         httpOnly: true, // Zapobiega dostępowi do ciasteczka z poziomu JavaScript
         maxAge: 1000 * 60 * 60 // Sesja ważna przez 1 godzinę
@@ -73,16 +73,9 @@ app.post('/register', [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
-    body('email')
-        .notEmpty().withMessage('Email jest wymagany')
-        .contains('@').withMessage('Email musi zawierać znak @')
-        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
-        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
-        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
-        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
+        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
     body('firstName')
         .notEmpty().withMessage('Imię jest wymagane'),
     body('lastName')
@@ -90,24 +83,17 @@ app.post('/register', [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, email, password, firstName, lastName } = req.body;
+        const { username, password, firstName, lastName } = req.body;
 
-        // Sprawdzenie, czy użytkownik już istnieje (username)
+        // Sprawdzenie, czy użytkownik już istnieje
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
-        // Sprawdzenie, czy email jest już zajęty
-        const existingEmail = await User.findOne({ where: { email } });
-        if (existingEmail) {
-            return res.status(400).json({ error: 'Użytkownik z tym adresem email już istnieje' });
-        }
-
         // Tworzenie nowego użytkownika (bez haszowania hasła)
         const newUser = await User.create({
             username,
-            email,
             password,
             firstName,
             lastName,
@@ -118,14 +104,14 @@ app.post('/register', [
         req.session.userId = newUser.id;
         req.session.username = newUser.username;
 
-        res.status(201).json({ 
-            message: 'Rejestracja udana', 
-            user: { 
-                id: newUser.id, 
-                username: newUser.username, 
-                firstName: newUser.firstName, 
-                lastName: newUser.lastName 
-            } 
+        res.status(201).json({
+            message: 'Rejestracja udana',
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName
+            }
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -133,31 +119,27 @@ app.post('/register', [
 });
 
 app.post('/login', [
-    body('email')
-        .notEmpty().withMessage('Email jest wymagany')
-        .contains('@').withMessage('Email musi zawierać znak @')
-        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
+    body('username')
+        .isString().withMessage('Nazwa użytkownika musi być tekstem')
+        .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
-        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
-        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
-        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
+        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
 
-        // Znajdź użytkownika po emailu
-        const user = await User.findOne({ where: { email } });
+        // Znajdź użytkownika po nazwie użytkownika
+        const user = await User.findOne({ where: { username } });
 
         if (!user) {
-            return res.status(400).json({ error: 'Nieprawidłowy email lub hasło' });
+            return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
         }
 
         // Sprawdź hasło (bez haszowania)
         if (user.password !== password) {
-            return res.status(400).json({ error: 'Nieprawidłowy email lub hasło' });
+            return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
         }
 
         // Inicjalizacja sesji
@@ -169,7 +151,6 @@ app.post('/login', [
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 isDealer: user.isDealer
@@ -242,13 +223,13 @@ app.post('/cars', authenticateSession, [
 ], async (req, res) => {
     try {
         const { brand, model, year, vin, price, horsePower, isAvailableForRent } = req.body;
-        const newCar = await Car.create({ 
-            brand, 
-            model, 
-            year, 
-            vin, 
+        const newCar = await Car.create({
+            brand,
+            model,
+            year,
+            vin,
             price,
-            horsePower, 
+            horsePower,
             isAvailableForRent
         });
         res.status(201).json(newCar);
@@ -265,7 +246,7 @@ app.post('/cars/:id/upload', upload.single('image'), async (req, res) => {
         }
 
         // Zapisz ścieżkę do pliku w bazie danych
-        car.image = req.file.path; 
+        car.image = req.file.path;
         await car.save();
 
         res.status(200).json({ message: 'Zdjęcie dodane pomyślnie', imagePath: car.imagePath });
@@ -326,14 +307,14 @@ app.delete('/cars/:id', authenticateSession, [
 ], async (req, res) => {
     const userId = req.session.userId;
     const carId = req.params.id;
-  
+
     try {
         // Sprawdź, czy użytkownik jest dealerem
         const user = await User.findByPk(userId);
         if (!user || !user.isDealer) {
             return res.status(403).json({ error: 'Brak uprawnień do usuwania samochodów' });
         }
-  
+
         // Usuń samochód
         const deleted = await Car.destroy({ where: { id: carId } });
         if (deleted) {
@@ -613,16 +594,9 @@ app.post('/admin/create-customer', authenticateSession, [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
-    body('email')
-        .notEmpty().withMessage('Email jest wymagany')
-        .contains('@').withMessage('Email musi zawierać znak @')
-        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
-        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
-        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
-        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
+        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
     body('firstName')
         .notEmpty().withMessage('Imię jest wymagane'),
     body('lastName')
@@ -630,34 +604,27 @@ app.post('/admin/create-customer', authenticateSession, [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, email, password, firstName, lastName } = req.body;
+        const { username, password, firstName, lastName } = req.body;
 
-        // Sprawdzenie, czy aktualny użytkownik jest administratorem
-        const admin = await User.findByPk(req.session.userId);
-        if (!admin || !admin.isDealer) {
+        // Sprawdzenie, czy aktualny użytkownik jest dealerem
+        const dealer = await User.findByPk(req.session.userId);
+        if (!dealer || !dealer.isDealer) {
             return res.status(403).json({ error: 'Brak uprawnień do tworzenia klientów' });
         }
 
-        // Sprawdzenie, czy nazwa użytkownika jest już zajęta
-        const existingUsername = await User.findOne({ where: { username } });
-        if (existingUsername) {
+        // Sprawdzenie, czy użytkownik już istnieje
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
-        // Sprawdzenie, czy email jest już zajęty
-        const existingEmail = await User.findOne({ where: { email } });
-        if (existingEmail) {
-            return res.status(400).json({ error: 'Użytkownik z tym adresem email już istnieje' });
-        }
-
-        // Tworzenie nowego klienta
+        // Tworzenie nowego klienta bez haszowania hasła
         const newUser = await User.create({
             username,
-            email,
             password,
             firstName,
             lastName,
-            isDealer: false
+            isDealer: false // Upewniamy się, że tworzymy klienta, a nie dealera
         });
 
         res.status(201).json({
@@ -665,7 +632,6 @@ app.post('/admin/create-customer', authenticateSession, [
             user: {
                 id: newUser.id,
                 username: newUser.username,
-                email: newUser.email,
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
                 isDealer: newUser.isDealer
