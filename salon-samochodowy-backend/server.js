@@ -73,9 +73,16 @@ app.post('/register', [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .notEmpty().withMessage('Email jest wymagany')
+        .contains('@').withMessage('Email musi zawierać znak @')
+        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
+        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
+        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
+        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
+        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
     body('firstName')
         .notEmpty().withMessage('Imię jest wymagane'),
     body('lastName')
@@ -83,19 +90,26 @@ app.post('/register', [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, password, firstName, lastName } = req.body;
+        const { username, email, password, firstName, lastName } = req.body;
 
-        // Sprawdzenie, czy użytkownik już istnieje
+        // Sprawdzenie, czy użytkownik już istnieje (username)
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
+        // Sprawdzenie, czy email jest już zajęty
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Użytkownik z tym adresem email już istnieje' });
+        }
+
         // Tworzenie nowego użytkownika (bez haszowania hasła)
-        const newUser = await User.create({ 
-            username, 
-            password, 
-            firstName, 
+        const newUser = await User.create({
+            username,
+            email,
+            password,
+            firstName,
             lastName,
             isDealer: true // Upewniamy się, że tworzymy klienta, a nie dealera
         });
@@ -119,42 +133,47 @@ app.post('/register', [
 });
 
 app.post('/login', [
-    body('username')
-        .isString().withMessage('Nazwa użytkownika musi być tekstem')
-        .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .notEmpty().withMessage('Email jest wymagany')
+        .contains('@').withMessage('Email musi zawierać znak @')
+        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
+        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
+        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
+        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
+        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        // Znajdź użytkownika po nazwie użytkownika
-        const user = await User.findOne({ where: { username } });
+        // Znajdź użytkownika po emailu
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
+            return res.status(400).json({ error: 'Nieprawidłowy email lub hasło' });
         }
 
         // Sprawdź hasło (bez haszowania)
         if (user.password !== password) {
-            return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
+            return res.status(400).json({ error: 'Nieprawidłowy email lub hasło' });
         }
 
         // Inicjalizacja sesji
         req.session.userId = user.id;
         req.session.username = user.username;
 
-        res.status(200).json({ 
-            message: 'Logowanie udane', 
-            user: { 
-                id: user.id, 
-                username: user.username, 
-                firstName: user.firstName, 
+        res.status(200).json({
+            message: 'Logowanie udane',
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                firstName: user.firstName,
                 lastName: user.lastName,
                 isDealer: user.isDealer
-            } 
+            }
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -594,9 +613,16 @@ app.post('/admin/create-customer', authenticateSession, [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .notEmpty().withMessage('Email jest wymagany')
+        .contains('@').withMessage('Email musi zawierać znak @')
+        .isEmail().withMessage('Email musi zawierać prawidłową część domenową'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
-        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
+        .isLength({ min: 8 }).withMessage('Hasło musi mieć co najmniej 8 znaków')
+        .matches(/[A-Z]/).withMessage('Hasło musi zawierać co najmniej 1 wielką literę')
+        .matches(/[0-9]/).withMessage('Hasło musi zawierać co najmniej 1 cyfrę')
+        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/).withMessage('Hasło musi zawierać co najmniej 1 znak specjalny'),
     body('firstName')
         .notEmpty().withMessage('Imię jest wymagane'),
     body('lastName')
@@ -604,38 +630,46 @@ app.post('/admin/create-customer', authenticateSession, [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, password, firstName, lastName } = req.body;
+        const { username, email, password, firstName, lastName } = req.body;
 
-        // Sprawdzenie, czy aktualny użytkownik jest dealerem
-        const dealer = await User.findByPk(req.session.userId);
-        if (!dealer || !dealer.isDealer) {
+        // Sprawdzenie, czy aktualny użytkownik jest administratorem
+        const admin = await User.findByPk(req.session.userId);
+        if (!admin || !admin.isDealer) {
             return res.status(403).json({ error: 'Brak uprawnień do tworzenia klientów' });
         }
 
-        // Sprawdzenie, czy użytkownik już istnieje
-        const existingUser = await User.findOne({ where: { username } });
-        if (existingUser) {
+        // Sprawdzenie, czy nazwa użytkownika jest już zajęta
+        const existingUsername = await User.findOne({ where: { username } });
+        if (existingUsername) {
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
-        // Tworzenie nowego klienta bez haszowania hasła
-        const newUser = await User.create({ 
-            username, 
-            password, 
-            firstName, 
+        // Sprawdzenie, czy email jest już zajęty
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Użytkownik z tym adresem email już istnieje' });
+        }
+
+        // Tworzenie nowego klienta
+        const newUser = await User.create({
+            username,
+            email,
+            password,
+            firstName,
             lastName,
-            isDealer: false // Upewniamy się, że tworzymy klienta, a nie dealera
+            isDealer: false
         });
 
-        res.status(201).json({ 
-            message: 'Klient został pomyślnie dodany', 
-            user: { 
-                id: newUser.id, 
-                username: newUser.username, 
-                firstName: newUser.firstName, 
+        res.status(201).json({
+            message: 'Klient został pomyślnie dodany',
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                email: newUser.email,
+                firstName: newUser.firstName,
                 lastName: newUser.lastName,
                 isDealer: newUser.isDealer
-            } 
+            }
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -643,8 +677,10 @@ app.post('/admin/create-customer', authenticateSession, [
 });
 
 // ====== START SERWERA ======
-app.listen(PORT, () => {
-    console.log(`Serwer działa na porcie ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Serwer działa na porcie ${PORT}`);
+    });
+}
 
 export { app };
