@@ -156,6 +156,7 @@ describe('AG – Dodawanie samochodu [POST /cars]', () => {
     });
 
     it('TC11 – duplikat VIN powinien zwrócić błąd serwera (unique constraint)', async () => {
+        const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
         mockCarCreate.mockRejectedValue(new Error('unique constraint'));
 
         const res = await request(app)
@@ -164,6 +165,7 @@ describe('AG – Dodawanie samochodu [POST /cars]', () => {
             .send(VALID_PAYLOAD);
 
         expect(res.status).toBe(500);
+        logSpy.mockRestore();
     });
 
 });

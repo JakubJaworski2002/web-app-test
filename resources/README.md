@@ -13,6 +13,7 @@ Frontend: Angular (`salon-samochodowy-frontend`)
 | [all_test_cases.md](all_test_cases.md) | **Główny rejestr** — 150 TC z wszystkich obszarów, spójny format tabeli, odnośniki do implementacji |
 | [TESTING.md](TESTING.md) | Instrukcja uruchamiania testów jednostkowych (instalacja, konfiguracja, mechanizm mockowania) |
 | [Test-Analysis-and-Concrete-Test-Cases.md](Test-Analysis-and-Concrete-Test-Cases.md) | Analiza QA projektu: ryzyka, priorytety P0/P1/P2, rekomendacje automatyzacji |
+| [plan.md](plan.md) | Plan implementacji ujednolicenia wersji i skryptów (backend/frontend) |
 
 ---
 
