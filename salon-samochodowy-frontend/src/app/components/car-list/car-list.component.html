@@ -1,14 +1,14 @@
 <div class="container my-4">
   <h2 class="mb-4 text-center" (click)="CollapseListCar()">Lista dostępnych samochodów</h2>
-  
+
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <button class="btn btn-primary me-2" (click)="sortByPrice()">
-        Sortuj według ceny 
+        Sortuj według ceny
         <i [ngClass]="priceSortDirection === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"></i>
       </button>
       <button class="btn btn-primary" (click)="sortByHorsePower()">
-        Sortuj według mocy 
+        Sortuj według mocy
         <i [ngClass]="horsePowerSortDirection === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"></i>
       </button>
     </div>
@@ -16,104 +16,103 @@
   </div>
 
   <div class="row" [ngClass]="isCollapsedList ? 'collapse show' : 'collapse'">
-      @for(car of filteredCars; track car.brand)
-      {
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 position-relative">
-            <!-- Dodanie ikony info-circle do przycisku Szczegóły -->
-            <a [routerLink]="['/cars', car.id]" class="btn btn-info btn-sm position-absolute top-0 end-0 m-2">
-              <i class="bi bi-info-circle me-1"></i> Szczegóły
-            </a>
-            
-            <div class="card-body d-flex flex-column">
-              @if(car.image)
-              {
-                <img [src]="'http://localhost:3000/' + car.image" alt="Zdjęcie samochodu" class="img-fluid" />
+    @for(car of filteredCars; track car.brand)
+    {
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 position-relative">
+        <!-- Dodanie ikony info-circle do przycisku Szczegóły -->
+        <a [routerLink]="['/cars', car.id]" class="btn btn-info btn-sm position-absolute top-0 end-0 m-2">
+          <i class="bi bi-info-circle me-1"></i> Szczegóły
+        </a>
+
+        <div class="card-body d-flex flex-column">
+          @if(car.image)
+          {
+          <img [src]="'http://localhost:3000/' + car.image" alt="Zdjęcie samochodu" class="img-fluid" />
+          }
+          <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+          <p class="card-text">
+            <strong>Rok:</strong> {{ car.year }}<br>
+            <strong>Moc:</strong> {{ car.horsePower }} KM<br>
+            <strong>Dostępny do wynajmu:</strong>
+            <span class="badge" [ngClass]="car.isAvailableForRent ? 'bg-success' : 'bg-danger'">
+              {{ car.isAvailableForRent ? 'Tak' : 'Nie' }}
+            </span>
+          </p>
+          <div class="mt-auto">
+            <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
+
+            @if(logged)
+            {
+            <div class="button-box">
+              @if(!isDealer && (car.renterId == userId || car.renterId == null)){
+              <app-buy-car [car]="car"></app-buy-car>
+              <app-rent-car [car]="car"></app-rent-car>
+              <calculate-leasing [car]="car"></calculate-leasing>
               }
-              <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
-              <p class="card-text">
-                <strong>Rok:</strong> {{ car.year }}<br>
-                <strong>Moc:</strong> {{ car.horsePower }} KM<br>
-                <strong>Dostępny do wynajmu:</strong> 
-                <span class="badge" [ngClass]="car.isAvailableForRent ? 'bg-success' : 'bg-danger'">
-                  {{ car.isAvailableForRent ? 'Tak' : 'Nie' }}
-                </span>
-              </p>
-              <div class="mt-auto">
-                <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
-                
-                @if(logged)
-                {
-                  <div class="button-box">
-                    @if(!isDealer && (car.renterId == userId || car.renterId == null)){
-                      <app-buy-car [car]="car"></app-buy-car>
-                      <app-rent-car [car]="car"></app-rent-car>
-                      <calculate-leasing [car]="car"></calculate-leasing>
-                    }
-                    @if(isDealer) {
-                      <button mat-raised-button color="primary" class="btn btn-danger btn-sm me-2" (click)="deleteCar(car.id)">
-                        Usuń
-                      </button>
-                      <edit-car [car]="car"></edit-car>
-                    }
-                  </div>
-                }
-              </div>
+              @if(isDealer) {
+              <button mat-raised-button color="primary" class="btn btn-danger btn-sm me-2" (click)="deleteCar(car.id)">
+                Usuń
+              </button>
+              <edit-car [car]="car"></edit-car>
+              }
             </div>
+            }
           </div>
         </div>
-      }
+      </div>
+    </div>
+    }
   </div>
 </div>
 
 @if(ownedCars.length > 0 && logged)
 {
-  <div class="container my-4">
-    <h2 class="mb-4 text-center" (click)="CollapseOwnedCar()">Lista twoich samochodów</h2>
-    <div class="row" [ngClass]="isCollapsedOwned ? 'collapse show' : 'collapse'">
-      <div class="col-md-4 mb-4" *ngFor="let car of ownedCars">
-        <div class="card h-100">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
-            <p class="card-text">
-              <strong>Rok:</strong> {{ car.year }}<br>
-              <strong>Moc:</strong> {{ car.horsePower }} KM<br>
-            </p>
-            <div class="mt-auto">
-              <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
-            </div>
+<div class="container my-4">
+  <h2 class="mb-4 text-center" (click)="CollapseOwnedCar()">Lista twoich samochodów</h2>
+  <div class="row" [ngClass]="isCollapsedOwned ? 'collapse show' : 'collapse'">
+    <div class="col-md-4 mb-4" *ngFor="let car of ownedCars">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+          <p class="card-text">
+            <strong>Rok:</strong> {{ car.year }}<br>
+            <strong>Moc:</strong> {{ car.horsePower }} KM<br>
+          </p>
+          <div class="mt-auto">
+            <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
+
 }
 
 @if(rentedCars.length > 0 && logged)
 {
-  <div class="container my-4">
-    <h2 class="mb-4 text-center" (click)="CollapseRentedCar()">Lista wynajętych samochodów</h2>
-    <div class="row" [ngClass]="isCollapsedRented ? 'collapse show' : 'collapse'">
-      <div class="col-md-4 mb-4" *ngFor="let car of rentedCars">
-        <div class="card h-100">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
-            <p class="card-text">
-              <strong>Rok:</strong> {{ car.year }}<br>
-              <strong>Moc:</strong> {{ car.horsePower }} KM<br>
-            </p>
-            <div class="mt-auto">
-              <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
-            </div>
+<div class="container my-4">
+  <h2 class="mb-4 text-center" (click)="CollapseRentedCar()">Lista wynajętych samochodów</h2>
+  <div class="row" [ngClass]="isCollapsedRented ? 'collapse show' : 'collapse'">
+    <div class="col-md-4 mb-4" *ngFor="let car of rentedCars">
+      <div class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+          <p class="card-text">
+            <strong>Rok:</strong> {{ car.year }}<br>
+            <strong>Moc:</strong> {{ car.horsePower }} KM<br>
+          </p>
+          <div class="mt-auto">
+            <h6 class="card-subtitle mb-2 text-muted">{{ car.price | currency:'PLN' }}</h6>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
+
 }
 <footer>
   <a routerLink="/privacy-policy">Polityka Prywatności</a>
 </footer>
-
