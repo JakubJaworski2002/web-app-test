@@ -86,10 +86,10 @@ export class AuthenticationService {
    * @param {string} lastName - Nazwisko użytkownika.
    * @returns {Observable<any>} Observable emitujący odpowiedź z backendu.
    */
-  register(username: string, password: string, firstName: string, lastName: string): Observable<any> {
+  register(username: string, email: string, password: string, firstName: string, lastName: string): Observable<any> {
     return this.http.post<{ user: User }>(
       `${this.apiUrl}/register`,
-      { username, password, firstName, lastName },
+      { username, email, password, firstName, lastName },
       { withCredentials: true }
     ).pipe(
       tap(response => {

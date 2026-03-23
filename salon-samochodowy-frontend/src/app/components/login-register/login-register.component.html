@@ -39,6 +39,37 @@
 
           </div>
           
+          <!-- E-mail (tylko rejestracja) -->
+          @if(!isLoginMode)
+          {
+            <div class="mb-3">
+              <label for="email" class="form-label">Adres e-mail</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                [(ngModel)]="email"
+                name="email"
+                #emailModel="ngModel"
+                required
+                email
+              >
+              @if(emailModel.invalid && (emailModel.dirty || emailModel.touched))
+              {
+                <div class="text-danger">
+                  @if(emailModel.errors?.['required'])
+                  {
+                    <div>Adres e-mail jest wymagany.</div>
+                  }
+                  @if(emailModel.errors?.['email'])
+                  {
+                    <div>Podaj prawidłowy adres e-mail.</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
           <!-- Hasło -->
           <div class="mb-3">
             <label for="password" class="form-label">Hasło</label>

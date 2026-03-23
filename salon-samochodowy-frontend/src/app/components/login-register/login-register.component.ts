@@ -22,6 +22,7 @@ export class LoginRegisterComponent implements OnDestroy {
   
   isLoginMode: boolean = true;
   username: string = '';
+  email: string = '';
   password: string = '';
   firstName: string = '';
   lastName: string = '';
@@ -41,6 +42,7 @@ export class LoginRegisterComponent implements OnDestroy {
     this.successMessage = '';
     // Resetowanie pól formularza przy przełączaniu trybu
     this.username = '';
+    this.email = '';
     this.password = '';
     this.firstName = '';
     this.lastName = '';
@@ -68,7 +70,7 @@ export class LoginRegisterComponent implements OnDestroy {
           }
         });
     } else {
-      this.authService.register(this.username, this.password, this.firstName, this.lastName)
+      this.authService.register(this.username, this.email, this.password, this.firstName, this.lastName)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response) => {
@@ -122,6 +124,7 @@ export class LoginRegisterComponent implements OnDestroy {
     }
     // Resetowanie formularza
     this.username = '';
+    this.email = '';
     this.password = '';
     this.firstName = '';
     this.lastName = '';

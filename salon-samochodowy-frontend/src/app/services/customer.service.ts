@@ -10,6 +10,7 @@ import { AuthenticationService, User } from './authentication.service';
 export interface Customer {
   id: number;
   username: string;
+  email: string;
   firstName: string;
   lastName: string;
   isDealer: boolean;
@@ -20,6 +21,7 @@ export interface Customer {
  */
 export interface NewCustomer {
   username: string;
+  email: string;
   password: string;
   firstName: string;
   lastName: string;

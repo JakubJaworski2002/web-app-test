@@ -8,8 +8,6 @@
 
 # Node
 /node_modules
-/uploads
-/data/*.sqlite
 npm-debug.log
 yarn-error.log
 
