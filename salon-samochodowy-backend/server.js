@@ -73,6 +73,8 @@ app.post('/register', [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .isEmail().withMessage('Podaj prawidłowy adres e-mail'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
         .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
@@ -83,7 +85,7 @@ app.post('/register', [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, password, firstName, lastName } = req.body;
+        const { username, email, password, firstName, lastName } = req.body;
 
         // Sprawdzenie, czy użytkownik już istnieje
         const existingUser = await User.findOne({ where: { username } });
@@ -91,13 +93,20 @@ app.post('/register', [
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
+        // Sprawdzenie, czy e-mail jest już zajęty
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Adres e-mail jest już zajęty' });
+        }
+
         // Tworzenie nowego użytkownika (bez haszowania hasła)
         const newUser = await User.create({
             username,
+            email,
             password,
             firstName,
             lastName,
-            isDealer: true // Upewniamy się, że tworzymy klienta, a nie dealera
+            isDealer: false // Rejestracja publiczna tworzy klienta, nie dealera
         });
 
         // Inicjalizacja sesji
@@ -109,8 +118,10 @@ app.post('/register', [
             user: {
                 id: newUser.id,
                 username: newUser.username,
+                email: newUser.email,
                 firstName: newUser.firstName,
-                lastName: newUser.lastName
+                lastName: newUser.lastName,
+                isDealer: newUser.isDealer
             }
         });
     } catch (error) {
@@ -594,6 +605,8 @@ app.post('/admin/create-customer', authenticateSession, [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .isEmail().withMessage('Podaj prawidłowy adres e-mail'),
     body('password')
         .isString().withMessage('Hasło musi być tekstem')
         .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
@@ -604,8 +617,8 @@ app.post('/admin/create-customer', authenticateSession, [
     handleValidationErrors
 ], async (req, res) => {
     try {
-        const { username, password, firstName, lastName } = req.body;
-
+        const { username, email, password, firstName, lastName } = req.body;
+        
         // Sprawdzenie, czy aktualny użytkownik jest dealerem
         const dealer = await User.findByPk(req.session.userId);
         if (!dealer || !dealer.isDealer) {
@@ -618,9 +631,16 @@ app.post('/admin/create-customer', authenticateSession, [
             return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
         }
 
+        // Sprawdzenie, czy e-mail jest już zajęty
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Adres e-mail jest już zajęty' });
+        }
+
         // Tworzenie nowego klienta bez haszowania hasła
         const newUser = await User.create({
             username,
+            email,
             password,
             firstName,
             lastName,
@@ -632,6 +652,7 @@ app.post('/admin/create-customer', authenticateSession, [
             user: {
                 id: newUser.id,
                 username: newUser.username,
+                email: newUser.email,
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
                 isDealer: newUser.isDealer

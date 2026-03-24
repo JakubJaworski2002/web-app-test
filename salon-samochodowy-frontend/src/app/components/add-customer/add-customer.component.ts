@@ -27,6 +27,7 @@ export class AddCustomerComponent {
    */
   newCustomer: NewCustomer = {
     username: '',
+    email: '',
     password: '',
     firstName: '',
     lastName: ''
@@ -56,7 +57,7 @@ export class AddCustomerComponent {
    */
   addCustomer(): void {
     // Walidacja danych wejściowych
-    if (!this.newCustomer.username || !this.newCustomer.password || 
+    if (!this.newCustomer.username || !this.newCustomer.email || !this.newCustomer.password || 
         !this.newCustomer.firstName || !this.newCustomer.lastName) {
       this.errorMessage = 'Proszę wypełnić wszystkie pola.';
       this.successMessage = '';
@@ -69,7 +70,7 @@ export class AddCustomerComponent {
         this.successMessage = `Klient ${response.user.firstName} ${response.user.lastName} został dodany.`;
         this.errorMessage = '';
         // Resetowanie formularza
-        this.newCustomer = { username: '', password: '', firstName: '', lastName: '' };
+        this.newCustomer = { username: '', email: '', password: '', firstName: '', lastName: '' };
       },
       error: (err) => {
         this.errorMessage = err.error?.error || 'Wystąpił błąd podczas dodawania klienta.';
