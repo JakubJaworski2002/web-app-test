@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { login } from '../utils/auth.utils';
 import { addCustomer, CustomerData } from '../utils/customer.utils';
 import { calculateLeasing, closeLeasingSummary } from '../utils/leasing.utils';
+import { registerDialogAutoAccept } from '../utils/dialog.utils';
 
 test.describe('Scenariusz 2: Kalkulator leasingowy', () => {
   const testClient: CustomerData = {
@@ -12,6 +13,8 @@ test.describe('Scenariusz 2: Kalkulator leasingowy', () => {
   };
 
   test('Klient oblicza leasing i kupuje auto', async ({ page, browser }) => {
+    registerDialogAutoAccept(page);
+
     // 1. Logowanie dealera w celu stworzenia konta klienta
     await page.goto('http://localhost:4200/cars');
     await login(page, { username: 'admin', password: 'Admin1!' });
@@ -22,6 +25,7 @@ test.describe('Scenariusz 2: Kalkulator leasingowy', () => {
     // 3. Otwarcie nowej sesji klienta po pomyślnej rejestracji przez admina
     const customerContext = await browser.newContext();
     const customerPage = await customerContext.newPage();
+    registerDialogAutoAccept(customerPage);
     await customerPage.goto('http://localhost:4200/cars');
     await login(customerPage, { username: testClient.username, password: 'Test1234!' });
 

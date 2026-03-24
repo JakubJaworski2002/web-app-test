@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import { login, LoginCredentials } from '../utils/auth.utils';
 import { addCar, CarData } from '../utils/car.utils';
+import { registerDialogAutoAccept } from '../utils/dialog.utils';
 
 const BASE_URL = 'http://localhost:4200';
 // ── Dane testowe ──────────────────────────────────────────────
@@ -24,6 +25,8 @@ const golfRData: CarData = {
 test.describe('Samochody – zarządzanie (dealer)', () => {
 
   test('Admin może dodać nowy samochód', async ({ page }) => {
+    registerDialogAutoAccept(page);
+
     await page.goto(`${BASE_URL}/cars`);
 
     await login(page, adminCredentials);
