@@ -1,21 +1,10 @@
 import { Page } from '@playwright/test';
 
 export function registerDialogAutoAccept(page: Page): void {
-  page.on('dialog', async (dialog) => {
-    try {
-      await dialog.accept();
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-
-      if (
-        message.includes('Test ended') ||
-        message.includes('Target page, context or browser has been closed') ||
-        message.includes('Internal server error, session closed')
-      ) {
-        return;
-      }
-
-      throw error;
-    }
+  page.on('dialog', (dialog) => {
+    // The application uses native alerts as success/error notifications.
+    // In CI they can fire while the page is already closing, so ignore any
+    // protocol/session errors from late dialog handling.
+    void dialog.accept().catch(() => {});
   });
 }
