@@ -80,7 +80,7 @@ test.describe('Scenariusz 11: Próba wynajmu zajętego samochodu przez drugiego 
     await expect(sameCarForB).toBeVisible();
 
     // Weryfikacja: auto jest niedostępne dla klienta B 
-    // Odznaka powinna pokazywać "Nie" (bg-danger), a przycisk "Wypożycz" nie powinien istnieć
+    // Odznaka powinna pokazywać "Nie", a przycisk "Wypożycz" nie powinien istnieć
     await expect(sameCarForB.locator('p.card-text .badge')).toHaveText(/Nie/);
     await expect(sameCarForB.locator('p.card-text .badge')).toHaveClass(/bg-danger/);
     await expect(sameCarForB.getByRole('button', { name: 'Wypożycz' })).not.toBeVisible();
