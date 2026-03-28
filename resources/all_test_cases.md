@@ -123,9 +123,9 @@ Format kolumny **Implementacja**: `[plik:linia](ścieżka#Llinia)` — klikalne 
 | TC 13 NJ | Checkbox regulamin = false | podsumowanie | przycisk Kupuję nieaktywny | - | R6 | | |
 | TC 14 NJ | Próba zakupu auta Reserved | status: Rezerwacja | błąd: pojazd chwilowo niedostępny | - | R5 | | |
 | TC 15 NJ | Wybór akcesoriów: Dywaniki | koszyk | cena całkowita zaktualizowana w locie | + | R6 | | |
-| TC 16 NJ | Email: "user.test.pl" (brak @) | formularz klienta | błąd: niepoprawny format email | - | R6 | | |
-| TC 17 NJ | Telefon: "abc-def-ghi" | formularz klienta | błąd: pole akceptuje tylko cyfry | - | R6 | | |
-| TC 18 NJ | GET /orders/my-orders | aktywna sesja | HTTP 200, lista zakupionych aut | + | R4 | | |
+| TC 16 NJ | Privacy Policy + rejestracja | /privacy-policy i auth modal | użytkownik zarejestrowany, widoczny "Witaj" | + | R6 | | [scenario-7.spec.ts:1](web-app-test/Playwright/tests/scenario-7.spec.ts#L1) |
+| TC 17 NJ | Próba wynajmu obiektu zajętego | dwa konteksty użytkowników | drugi użytkownik nie widzi przycisku Wypożycz | + | R5 | | [scenario-8.spec.ts:1](web-app-test/Playwright/tests/scenario-8.spec.ts#L1) |
+| TC 18 NJ | Leasing na 2 autach + zakup | porównanie rat i zakup | wyższa rata na droższym + brak przycisku Kup | + | R3,R4,R5 | | [scenario-9.spec.ts:1](web-app-test/Playwright/tests/scenario-9.spec.ts#L1) |
 | TC 19 NJ | Wpłata własna: 0% | kalkulator aktywny | poprawna rata (leasing bez wpłaty) | + | R1 | | [leasing.test.js:151](web-app-test/salon-samochodowy-backend/tests/leasing.test.js#L151) |
 | TC 20 NJ | Wybór raty malejącej | opcje leasingu | zmiana harmonogramu spłat w PDF | + | R3 | | |
 | TC 21 NJ | Wybór salonu: Warszawa | formularz dostawy | przypisanie salonu do zamówienia | + | R6 | | |

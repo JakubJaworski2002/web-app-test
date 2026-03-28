@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 /**
  * Klika przycisk "Kup" dla wybranego samochodu zdefiniowanego przez selektor
@@ -6,7 +6,9 @@ import { Page, Locator } from '@playwright/test';
  * @param carLocator - selektor konkretnej karty (.card)
  */
 export async function buyCar(page: Page, carLocator: Locator): Promise<void> {
-  await carLocator.getByRole('button', { name: 'Kup' }).click();
+  const buyButton = carLocator.getByRole('button', { name: 'Kup' });
+  await expect(buyButton).toBeVisible({ timeout: 10000 });
+  await buyButton.click();
 }
 
 /**
