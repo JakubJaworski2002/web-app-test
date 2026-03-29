@@ -1,6 +1,23 @@
 # Scenariusze Testów Automatycznych E2E (Playwright)
 
-Poniżej znajduje się 5 scenariuszy testowych E2E dla aplikacji Salonu Samochodowego. Każdy ze scenariuszy obejmuje przepływ przechodzący przez min. 2-3 kluczowe funkcjonalności biznesowe.
+Poniżej znajduje się 15 scenariuszy testowych E2E dla aplikacji Salonu Samochodowego. Każdy ze scenariuszy obejmuje przepływ przechodzący przez min. 2-3 kluczowe funkcjonalności biznesowe.
+
+## Mapowanie wymagań (R)
+- R1: Scenariusz 1 - Rejestracja, logowanie i dodanie nowego pojazdu.
+- R2: Scenariusz 2 - Kalkulator leasingowy i proces zakupu.
+- R3: Scenariusz 3 - Dodanie klienta i wynajem pojazdu.
+- R4: Scenariusz 4 - Edycja istniejącego auta.
+- R5: Scenariusz 5 - Auth guard i walidacja logowania.
+- R6: Scenariusz 6 - Walidacja formularza dodawania/edycji auta.
+- R7: Scenariusz 7 - Privacy Policy i rejestracja.
+- R8: Scenariusz 8 - Walidacja wynajmu w scenariuszu negatywnym.
+- R9: Scenariusz 9 - Porównanie leasingu dla dwóch aut i zakup.
+- R10: Scenariusz 10 - Przepływ wieloaktorowy Admin + Klient.
+- R11: Scenariusz 11 - Blokada nakładających się wynajmów.
+- R12: Scenariusz 12 - Przerwanie formularza i brak autozapisu.
+- R13: Scenariusz 13 - Filtrowanie listy aut i zakup.
+- R14: Scenariusz 14 - Modyfikacja ceny widoczna po stronie klienta.
+- R15: Scenariusz 15 - Blokada zakupu dla niekompletnego profilu.
 
 ---
 
@@ -181,7 +198,7 @@ Poniżej znajduje się 5 scenariuszy testowych E2E dla aplikacji Salonu Samochod
 ---
 
 ## Scenariusz 15: Odrzucenie i zablokowanie kupna dla niekompletnego profilu klienta
-**Cel:** Weryfikacja formularza `buy-car` sprawdzająca, czy mechanizmy pod spodem nie uwierzytelnianiają zakupu np. beż użycia poprawnego formatu profilowania kont.
+**Cel:** Weryfikacja formularza `buy-car` sprawdzająca, czy mechanizmy pod spodem nie uwierzytelnianiają zakupu np. bez użycia poprawnego formatu profilowania kont.
 
 **Kroki (ang. Steps):**
 1. Przejście do utworzenia profilu przez zewnętrzną procedurę pracowniczą (moduł `add-customer`), gdzie dodaje celowo skąpe dane klienta bez numerów telefonów i ważnego dowodu tożsamości.

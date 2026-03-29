@@ -8,13 +8,7 @@ export interface CustomerData {
   lastName: string;
 }
 
-/**
- * Otwiera modal i dodaje klienta do bazy
- * @param page 
- * @param customer - Obiekt ze standardowymi danymi klienta
- */
 export async function addCustomer(page: Page, customer: CustomerData): Promise<void> {
-  // Upewnij się, że żaden modal nie blokuje kliknięć
   const authModal = page.locator('#authModal');
   if (await authModal.isVisible()) {
     await authModal.locator('.btn-close').click().catch(() => {});
@@ -29,7 +23,6 @@ export async function addCustomer(page: Page, customer: CustomerData): Promise<v
 
   await page.locator('button[data-bs-target="#addCustomerModal"]').click();
 
-  // Oczekiwanie aż modal będzie otwarty i aktywny
   const modal = page.locator('#addCustomerModal');
   await modal.waitFor({ state: 'visible' });
 
@@ -48,13 +41,20 @@ export async function addCustomer(page: Page, customer: CustomerData): Promise<v
   await modal.locator('#firstName').fill(customer.firstName);
   await modal.locator('#lastName').fill(customer.lastName);
 
-  // Zapisz za pomocą przycisku Dodaj Klienta w tym formularzu
+  const createCustomerResponsePromise = page.waitForResponse(
+    (response) => response.request().method() === 'POST' && response.url().includes('/admin/create-customer'),
+    { timeout: 15000 }
+  );
+
   await modal.locator('button[type="submit"]').click();
 
-  // Upewnij się, że modal się zamyka, zanim przejdziemy dalej
-  await modal.waitFor({ state: 'hidden', timeout: 10000 }).catch(async () => {
-    // W razie problemów spróbuj zamknąć ręcznie
-    await modal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
-    await modal.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
-  });
+  const createCustomerResponse = await createCustomerResponsePromise;
+  if (!createCustomerResponse.ok()) {
+    throw new Error(`Tworzenie klienta nie powiodlo sie (HTTP ${createCustomerResponse.status()})`);
+  }
+
+  await modal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
+  await modal.waitFor({ state: 'hidden', timeout: 10000 });
+  await page.locator('.modal-backdrop.show').waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
 }
+

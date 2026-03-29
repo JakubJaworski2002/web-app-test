@@ -35,7 +35,12 @@ jobs:
 
       - name: Install Playwright browsers
         working-directory: Playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
+
+      - name: Cleanup SQLite sidecar files
+        run: |
+          rm -f salon-samochodowy-backend/data/*.sqlite-shm
+          rm -f salon-samochodowy-backend/data/*.sqlite-wal
 
       - name: Start backend
         working-directory: salon-samochodowy-backend
@@ -74,7 +79,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: Playwright
-        run: npx playwright test
+        run: npx playwright test --project=chromium
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

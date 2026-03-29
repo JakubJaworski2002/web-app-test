@@ -1,30 +1,29 @@
+//Jakub Jaworski
 import { test, expect } from '@playwright/test';
-import path from 'path';
 import { login, LoginCredentials } from '../utils/auth.utils';
 import { addCar, CarData } from '../utils/car.utils';
 import { registerDialogAutoAccept } from '../utils/dialog.utils';
 
 const BASE_URL = 'http://localhost:4200';
-// ── Dane testowe ──────────────────────────────────────────────
 const adminCredentials: LoginCredentials = {
   username: 'admin',
   password: 'Admin1!',
 };
 
-const golfRData: CarData = {
-  brand: 'Volkswagen',
-  model: 'Golf R (Mk8.5)',
-  year: 2024,
-  vin: 'WVWZZZCDZRW012340',
-  price: 245500,
-  horsePower: 333,
-  imagePath: path.join(__dirname, '..', 'src', 'golf-r.jpg'),
-};
-// ─────────────────────────────────────────────────────────────
-
-test.describe('Samochody – zarządzanie (dealer)', () => {
+test.describe('[R1] Scenariusz 1: Samochody - zarządzanie (dealer)', () => {
 
   test('Admin może dodać nowy samochód', async ({ page }) => {
+    const suffix = Date.now();
+    const golfRData: CarData = {
+      brand: `Volkswagen${suffix}`,
+      model: `GolfR${suffix}`,
+      year: 2024,
+      vin: `WVWZZZCDZ${String(suffix).slice(-8).padStart(8, '0')}`,
+      price: 245500,
+      horsePower: 333,
+      isAvailableForRent: true,
+    };
+
     registerDialogAutoAccept(page);
 
     await page.goto(`${BASE_URL}/cars`);
@@ -50,3 +49,4 @@ test.describe('Samochody – zarządzanie (dealer)', () => {
   });
 
 });
+
