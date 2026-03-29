@@ -41,13 +41,18 @@ test.describe('[R4] Scenariusz 4: Edycja istniejącego auta', () => {
 
     await editableCard.getByRole('button', { name: 'Edytuj' }).click();
 
-    const form = page.locator('.add-car-form').last();
+    const form = page.locator('.add-car-form:visible').last();
     await expect(form).toBeVisible();
     await form.locator('#vin').fill(newVin);
     await form.locator('#year').fill(String(newYear));
     await form.locator('#price').fill(String(newPrice));
     await form.locator('#horsePower').fill(String(newHorsePower));
-    await form.getByRole('button', { name: 'Zapisz' }).click();
+
+    const saveButton = form.getByRole('button', { name: 'Zapisz' });
+    await expect(saveButton).toBeEnabled({ timeout: 10000 });
+    await saveButton.click();
+
+    await expect(form).toBeHidden({ timeout: 10000 });
 
     const updatedCard = page.locator('.row.collapse.show .card').filter({
       hasText: `${createdCar.brand} ${createdCar.model}`,

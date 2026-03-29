@@ -37,6 +37,11 @@ jobs:
         working-directory: Playwright
         run: npx playwright install --with-deps chromium
 
+      - name: Cleanup SQLite sidecar files
+        run: |
+          rm -f salon-samochodowy-backend/data/*.sqlite-shm
+          rm -f salon-samochodowy-backend/data/*.sqlite-wal
+
       - name: Start backend
         working-directory: salon-samochodowy-backend
         run: |

@@ -42,6 +42,8 @@ test.describe('[R13] Scenariusz 13: Filtrowanie listy aut i zakup', () => {
     await login(page, { username: testClient.username, password: testClient.password! });
 
     await page.goto('http://localhost:4200/cars');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle').catch(() => {});
 
     await page.getByPlaceholder('Wyszukaj markę').fill(carForFilter.brand);
 
@@ -50,7 +52,7 @@ test.describe('[R13] Scenariusz 13: Filtrowanie listy aut i zakup', () => {
       hasText: `${carForFilter.brand} ${carForFilter.model}`,
       has: page.getByRole('button', { name: 'Kup' }),
     }).last();
-    await expect(carCard).toBeVisible();
+    await expect(carCard).toBeVisible({ timeout: 15000 });
 
     page.on('dialog', (dialog) => dialog.accept());
     await buyCar(page, carCard);

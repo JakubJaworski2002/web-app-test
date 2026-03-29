@@ -16,7 +16,7 @@
   </div>
 
   <div class="row" [ngClass]="isCollapsedList ? 'collapse show' : 'collapse'">
-    @for(car of filteredCars; track car.brand)
+    @for(car of filteredCars; track car.id)
     {
     <div class="col-md-4 mb-4">
       <div class="card h-100 position-relative">

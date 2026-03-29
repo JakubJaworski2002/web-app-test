@@ -41,11 +41,20 @@ export async function addCustomer(page: Page, customer: CustomerData): Promise<v
   await modal.locator('#firstName').fill(customer.firstName);
   await modal.locator('#lastName').fill(customer.lastName);
 
+  const createCustomerResponsePromise = page.waitForResponse(
+    (response) => response.request().method() === 'POST' && response.url().includes('/admin/create-customer'),
+    { timeout: 15000 }
+  );
+
   await modal.locator('button[type="submit"]').click();
 
-  await modal.waitFor({ state: 'hidden', timeout: 10000 }).catch(async () => {
-    await modal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
-    await modal.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
-  });
+  const createCustomerResponse = await createCustomerResponsePromise;
+  if (!createCustomerResponse.ok()) {
+    throw new Error(`Tworzenie klienta nie powiodlo sie (HTTP ${createCustomerResponse.status()})`);
+  }
+
+  await modal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
+  await modal.waitFor({ state: 'hidden', timeout: 10000 });
+  await page.locator('.modal-backdrop.show').waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
 }
 

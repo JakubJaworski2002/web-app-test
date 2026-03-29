@@ -19,7 +19,7 @@ export interface EditCarData {
 export async function addCar(page: Page, car: CarData): Promise<void> {
   await page.getByRole('button', { name: 'Dodaj Samochód' }).click();
 
-  const form = page.locator('.add-car-form').last();
+  const form = page.locator('.add-car-form:visible').last();
   await expect(form).toBeVisible({ timeout: 10000 });
 
   await form.locator('#brand').fill(car.brand);
@@ -61,7 +61,7 @@ function sanitizeVin(rawVin: string): string {
 export async function editCar(page: Page, carLocator: Locator, editData: EditCarData): Promise<void> {
   await carLocator.getByRole('button', { name: 'Edytuj' }).click();
 
-  const form = page.locator('.add-car-form').last();
+  const form = page.locator('.add-car-form:visible').last();
   await expect(form).toBeVisible({ timeout: 10000 });
 
   if (editData.price !== undefined) {
@@ -71,6 +71,8 @@ export async function editCar(page: Page, carLocator: Locator, editData: EditCar
     await form.locator('#year').fill(String(editData.year));
   }
 
-  await form.getByRole('button', { name: 'Zapisz' }).click();
+  const saveButton = form.getByRole('button', { name: 'Zapisz' });
+  await expect(saveButton).toBeEnabled({ timeout: 10000 });
+  await saveButton.click();
 }
 
