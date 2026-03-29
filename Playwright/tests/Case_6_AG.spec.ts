@@ -13,7 +13,7 @@ test.describe('[R6] Scenariusz 6: Walidacja formularza dodawania i edycja auta',
     await login(page, { username: 'admin', password: 'Admin1!' });
 
     await page.getByRole('button', { name: 'Dodaj Samochód' }).click();
-    const form = page.locator('.add-car-form').last();
+    const form = page.locator('.add-car-form:visible').last();
     await expect(form).toBeVisible();
 
     const saveButton = form.getByRole('button', { name: 'Zapisz' });
@@ -53,11 +53,15 @@ test.describe('[R6] Scenariusz 6: Walidacja formularza dodawania i edycja auta',
     await expect(createdCard).toBeVisible();
 
     await createdCard.getByRole('button', { name: 'Edytuj' }).click();
-    const editForm = page.locator('.add-car-form').last();
+    const editForm = page.locator('.add-car-form:visible').last();
     await expect(editForm).toBeVisible();
 
     await editForm.locator('#year').fill(String(yearAfterEdit));
-    await editForm.getByRole('button', { name: 'Zapisz' }).click();
+    const editSaveButton = editForm.getByRole('button', { name: 'Zapisz' });
+    await expect(editSaveButton).toBeEnabled({ timeout: 10000 });
+    await editSaveButton.click();
+
+    await expect(editForm).toBeHidden({ timeout: 10000 });
 
     const updatedCard = page.locator('.row.collapse.show .card').filter({
       hasText: `${brand} ${model}`,

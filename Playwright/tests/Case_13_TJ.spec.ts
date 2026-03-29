@@ -41,11 +41,13 @@ test.describe('[R13] Scenariusz 13: Filtrowanie listy aut i zakup', () => {
 
     await login(page, { username: testClient.username, password: testClient.password! });
 
-    await page.goto('http://localhost:4200/cars');
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForLoadState('networkidle').catch(() => {});
-
-    await page.getByPlaceholder('Wyszukaj markę').fill(carForFilter.brand);
+    const searchByBrandInput = page.getByPlaceholder('Wyszukaj markę');
+    const isSearchVisible = await searchByBrandInput.isVisible().catch(() => false);
+    if (!isSearchVisible) {
+      await page.goto('http://localhost:4200/cars', { waitUntil: 'domcontentloaded' });
+    }
+    await expect(searchByBrandInput).toBeVisible({ timeout: 15000 });
+    await searchByBrandInput.fill(carForFilter.brand);
 
     const filteredCars = page.locator('.row.collapse.show .card');
     const carCard = filteredCars.filter({
