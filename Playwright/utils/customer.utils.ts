@@ -14,14 +14,29 @@ export interface CustomerData {
  * @param customer - Obiekt ze standardowymi danymi klienta
  */
 export async function addCustomer(page: Page, customer: CustomerData): Promise<void> {
-  // Kliknięcie guzika w navbarze otwierającego modal
+  // Upewnij się, że żaden modal nie blokuje kliknięć
+  const authModal = page.locator('#authModal');
+  if (await authModal.isVisible()) {
+    await authModal.locator('.btn-close').click().catch(() => {});
+    await authModal.waitFor({ state: 'hidden' });
+  }
+
+  const addCustomerModal = page.locator('#addCustomerModal');
+  if (await addCustomerModal.isVisible()) {
+    await addCustomerModal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
+    await addCustomerModal.waitFor({ state: 'hidden' });
+  }
+
   await page.locator('button[data-bs-target="#addCustomerModal"]').click();
 
-  // Oczekiwanie aż modal wejdzie w interakcję
-  const modal = page.locator('.modal-content').filter({ hasText: 'Dodaj Nowego Klienta' });
+  // Oczekiwanie aż modal będzie otwarty i aktywny
+  const modal = page.locator('#addCustomerModal');
   await modal.waitFor({ state: 'visible' });
 
-  await modal.locator('#username').fill(customer.username);
+  const modalContent = modal.locator('.modal-content').filter({ hasText: 'Dodaj Nowego Klienta' });
+  await modalContent.waitFor({ state: 'visible' });
+
+  await modalContent.locator('#username').fill(customer.username);
   await modal.locator('#email').fill(customer.email);
   
   if (customer.password) {
@@ -35,8 +50,11 @@ export async function addCustomer(page: Page, customer: CustomerData): Promise<v
 
   // Zapisz za pomocą przycisku Dodaj Klienta w tym formularzu
   await modal.locator('button[type="submit"]').click();
-  
-  // Zależnie od działania aplikacji, modal może się zamknąć pomyślnie.
-  // Jeśli tak, warto poczekać na jego zniknięcie. Jeśli alertu/toastu użyto - można na to zezwolić w specach przodujących
-  // await modal.waitFor({ state: 'hidden' }); 
+
+  // Upewnij się, że modal się zamyka, zanim przejdziemy dalej
+  await modal.waitFor({ state: 'hidden', timeout: 10000 }).catch(async () => {
+    // W razie problemów spróbuj zamknąć ręcznie
+    await modal.locator('.btn-close, button[data-bs-dismiss="modal"]').first().click().catch(() => {});
+    await modal.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+  });
 }

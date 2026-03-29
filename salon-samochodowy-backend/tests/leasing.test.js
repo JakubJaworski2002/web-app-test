@@ -60,6 +60,13 @@ describe('Leasing Calculator - TC 04-05: Identyfikacja Klienta', () => {
         expect(result.error).toBe('NIP musi mieć 10 cyfr');
     });
 
+    test('TC 04a - should reject NIP with incorrect length using validateNIP helper', () => {
+        expect(validateNIP('12345')).toBe(false);
+        expect(validateNIP('123456789')).toBe(false);
+        expect(validateNIP('123456789012')).toBe(false);
+        expect(validateNIP('1234567890')).toBe(true);
+    });
+
     test('TC 05 - should validate PESEL with correct 11 digits', () => {
         const validPESEL = '90010112345';
 
@@ -83,7 +90,18 @@ describe('Leasing Calculator - TC 06: Wiek samochodu', () => {
         expect(eligibility.carAge).toBeGreaterThanOrEqual(10);
     });
 });
+describe('Leasing Calculator - TC 13: Niedostępne auto', () => {
 
+    test('TC 13 - should reject car with non-Available status for leasing', () => {
+        const oldCarYear = 2023;
+        const carStatus = 'Sold';
+
+        const availability = checkCarLeasingEligibility(oldCarYear, carStatus);
+
+        expect(availability.isEligible).toBe(false);
+        expect(availability.errors).toContain('Samochód nie jest dostępny do leasingu (status: Sold)');
+    });
+});
 describe('Leasing Calculator - TC 07: Ubezpieczenie GAP', () => {
 
     test('TC 07 - should add GAP insurance cost to monthly rate', () => {
