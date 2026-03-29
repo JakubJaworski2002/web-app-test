@@ -1,8 +1,9 @@
+//Nikodem Jasionowski
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:4200';
 
-test.describe('Scenariusz 7: Privacy Policy i rejestracja', () => {
+test.describe('[R7] Scenariusz 7: Privacy Policy i rejestracja', () => {
   test('Przejście na Privacy Policy i rejestracja użytkownika', async ({ page }) => {
     await page.goto(`${BASE_URL}/cars`);
 

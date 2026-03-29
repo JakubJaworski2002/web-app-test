@@ -35,7 +35,7 @@ jobs:
 
       - name: Install Playwright browsers
         working-directory: Playwright
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Start backend
         working-directory: salon-samochodowy-backend
@@ -74,7 +74,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: Playwright
-        run: npx playwright test
+        run: npx playwright test --project=chromium
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

@@ -1,3 +1,4 @@
+//Nikodem Jasionowski
 import { test, expect } from '@playwright/test';
 import { login } from '../utils/auth.utils';
 import { addCustomer, CustomerData } from '../utils/customer.utils';
@@ -8,7 +9,7 @@ import { buyCar } from '../utils/transaction.utils';
 const BASE_URL = 'http://localhost:4200';
 const adminCredentials = { username: 'admin', password: 'Admin1!' };
 
-test.describe('Scenariusz 9: Porównanie leasingu na dwóch autach + zakup', () => {
+test.describe('[R9] Scenariusz 9: Porównanie leasingu na dwóch autach + zakup', () => {
   test('Porównanie i finalizacja kupna droższego auta', async ({ page, browser }) => {
     await page.goto(`${BASE_URL}/cars`);
     await login(page, adminCredentials);
@@ -41,7 +42,6 @@ test.describe('Scenariusz 9: Porównanie leasingu na dwóch autach + zakup', () 
       };
       await addCar(page, extraCar);
 
-      // refresh customer view to pick up new car
       await customerPage.reload();
       buyableCount = await buyableCars().count();
     }

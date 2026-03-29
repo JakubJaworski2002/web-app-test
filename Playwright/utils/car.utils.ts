@@ -8,33 +8,30 @@ export interface CarData {
   price: number;
   horsePower: number;
   isAvailableForRent?: boolean;
-  imagePath?: string; // opcjonalna ścieżka do zdjęcia z folderu src/
+  imagePath?: string;
 }
 
 export interface EditCarData {
   price?: number;
   year?: number;
-  // Dodaj inne pola jeśli potrzebne
 }
 
-/**
- * Wypełnia i zapisuje formularz dodawania nowego samochodu.
- * @param page - instancja Playwright Page
- * @param car  - dane samochodu { brand, model, year, vin, price, horsePower, imagePath? }
- */
 export async function addCar(page: Page, car: CarData): Promise<void> {
   await page.getByRole('button', { name: 'Dodaj Samochód' }).click();
 
-  await page.getByRole('textbox', { name: 'Marka' }).fill(car.brand);
-  await page.getByRole('textbox', { name: 'Model' }).fill(car.model);
-  await page.getByRole('spinbutton', { name: 'Rok' }).fill(String(car.year));
+  const form = page.locator('.add-car-form').last();
+  await expect(form).toBeVisible({ timeout: 10000 });
+
+  await form.locator('#brand').fill(car.brand);
+  await form.locator('#model').fill(car.model);
+  await form.locator('#year').fill(String(car.year));
   const sanitizedVin = sanitizeVin(car.vin);
-  await page.getByRole('textbox', { name: 'VIN' }).fill(sanitizedVin);
-  await page.getByRole('spinbutton', { name: 'Cena' }).fill(String(car.price));
-  await page.getByRole('spinbutton', { name: 'Moc' }).fill(String(car.horsePower));
+  await form.locator('#vin').fill(sanitizedVin);
+  await form.locator('#price').fill(String(car.price));
+  await form.locator('#horsePower').fill(String(car.horsePower));
 
   const isAvailableForRent = car.isAvailableForRent ?? true;
-  const availabilityCheckbox = page.locator('#isAvailableForRent');
+  const availabilityCheckbox = form.locator('#isAvailableForRent');
   if (isAvailableForRent) {
     await availabilityCheckbox.check();
   } else {
@@ -42,10 +39,10 @@ export async function addCar(page: Page, car: CarData): Promise<void> {
   }
 
   if (car.imagePath) {
-    await page.locator('#image').setInputFiles(car.imagePath);
+    await form.locator('#image').setInputFiles(car.imagePath);
   }
 
-  const saveButton = page.getByRole('button', { name: 'Zapisz' });
+  const saveButton = form.getByRole('button', { name: 'Zapisz' });
   await expect(saveButton).toBeEnabled({ timeout: 10000 });
   await saveButton.click();
 }
@@ -61,22 +58,19 @@ function sanitizeVin(rawVin: string): string {
   return vin;
 }
 
-
-/**
- * Edytuje istniejący samochód.
- * @param page - instancja Playwright Page
- * @param carLocator - locator karty samochodu
- * @param editData - dane do edycji
- */
 export async function editCar(page: Page, carLocator: Locator, editData: EditCarData): Promise<void> {
   await carLocator.getByRole('button', { name: 'Edytuj' }).click();
 
+  const form = page.locator('.add-car-form').last();
+  await expect(form).toBeVisible({ timeout: 10000 });
+
   if (editData.price !== undefined) {
-    await page.getByRole('spinbutton', { name: 'Cena' }).fill(String(editData.price));
+    await form.locator('#price').fill(String(editData.price));
   }
   if (editData.year !== undefined) {
-    await page.getByRole('spinbutton', { name: 'Rok' }).fill(String(editData.year));
+    await form.locator('#year').fill(String(editData.year));
   }
 
-  await page.getByRole('button', { name: 'Zapisz' }).click();
+  await form.getByRole('button', { name: 'Zapisz' }).click();
 }
+

@@ -5,11 +5,6 @@ export interface LoginCredentials {
   password: string;
 }
 
-/**
- * Loguje użytkownika przez modal logowania.
- * @param page    - instancja Playwright Page
- * @param credentials - dane logowania { username, password }
- */
 export async function login(page: Page, credentials: LoginCredentials): Promise<void> {
   await page.getByRole('button', { name: 'Zaloguj się' }).click();
 
@@ -19,6 +14,6 @@ export async function login(page: Page, credentials: LoginCredentials): Promise<
 
   await page.getByLabel('Logowanie').getByRole('button', { name: 'Zaloguj się' }).click();
 
-  // Poczekaj na zamknięcie modalu – znak udanego logowania
   await dialog.waitFor({ state: 'hidden' });
 }
+

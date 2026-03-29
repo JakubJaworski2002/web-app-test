@@ -1,3 +1,4 @@
+//Nikodem Jasionowski
 import { test, expect } from '@playwright/test';
 import { login } from '../utils/auth.utils';
 import { addCustomer, CustomerData } from '../utils/customer.utils';
@@ -6,7 +7,7 @@ import { rentCar } from '../utils/transaction.utils';
 const BASE_URL = 'http://localhost:4200';
 const adminCredentials = { username: 'admin', password: 'Admin1!' };
 
-test.describe('Scenariusz 8: Walidacja wynajmu przy zajętym aucie', () => {
+test.describe('[R8] Scenariusz 8: Walidacja wynajmu przy zajętym aucie', () => {
   test('Klient B nie może wynająć auta zajętego przez klienta A', async ({ page, browser }) => {
     await page.goto(`${BASE_URL}/cars`);
     await login(page, adminCredentials);
@@ -43,13 +44,14 @@ test.describe('Scenariusz 8: Walidacja wynajmu przy zajętym aucie', () => {
     }).first();
     await expect(availableCard).toBeVisible();
 
-    const carTitle = await availableCard.locator('h5.card-title').textContent();
+    const carTitle = (await availableCard.locator('h5.card-title').textContent())?.trim() ?? '';
+    expect(carTitle).not.toEqual('');
 
     pageA.on('dialog', (d) => d.accept());
     await rentCar(pageA, availableCard);
 
     const rentedCard = pageA.locator('.card').filter({
-      has: pageA.locator('h5.card-title', { hasText: carTitle as string }),
+      has: pageA.locator('h5.card-title', { hasText: carTitle }),
     }).first();
 
     await expect(rentedCard.locator('p.card-text .badge')).toHaveText(/Nie/);
@@ -63,7 +65,7 @@ test.describe('Scenariusz 8: Walidacja wynajmu przy zajętym aucie', () => {
     await login(pageB, { username: clientB.username, password: clientB.password! });
 
     const sameCarForB = pageB.locator('.card').filter({
-      has: pageB.locator('h5.card-title', { hasText: carTitle as string }),
+      has: pageB.locator('h5.card-title', { hasText: carTitle }),
     }).first();
 
     await expect(sameCarForB.locator('p.card-text .badge')).toHaveText(/Nie/);
