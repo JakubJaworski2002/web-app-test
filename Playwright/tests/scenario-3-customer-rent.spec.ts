@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { login } from '../utils/auth.utils';
 import { addCustomer, CustomerData } from '../utils/customer.utils';
 import { rentCar } from '../utils/transaction.utils';
+import { registerDialogAutoAccept } from '../utils/dialog.utils';
 
 test.describe('Scenariusz 3: Zarządzanie klientami i wynajem', () => {
   const rentClient: CustomerData = {
@@ -12,6 +13,8 @@ test.describe('Scenariusz 3: Zarządzanie klientami i wynajem', () => {
   };
 
   test('Rejestracja klienta z poziomu panelu i wykonanie wynajmu', async ({ page, browser }) => {
+    registerDialogAutoAccept(page);
+
     // 1. Zalogowanie jako sprzedawca/admin w celu zarządzania klientem
     await page.goto('http://localhost:4200/cars');
     await login(page, { username: 'admin', password: 'Admin1!' });
@@ -23,6 +26,7 @@ test.describe('Scenariusz 3: Zarządzanie klientami i wynajem', () => {
     // Wynika to z faktu, że przyciski kupna i wynajmu pojawiają się tylko dla !isDealer
     const customerContext = await browser.newContext();
     const customerPage = await customerContext.newPage();
+    registerDialogAutoAccept(customerPage);
     await customerPage.goto('http://localhost:4200/cars');
     await login(customerPage, { username: rentClient.username, password: 'Test1234!' });
 

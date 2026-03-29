@@ -1,0 +1,93 @@
+name: Playwright CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install backend dependencies
+        working-directory: salon-samochodowy-backend
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: salon-samochodowy-frontend
+        run: npm ci
+
+      - name: Install Playwright dependencies
+        working-directory: Playwright
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: Playwright
+        run: npx playwright install --with-deps
+
+      - name: Start backend
+        working-directory: salon-samochodowy-backend
+        run: |
+          node server.js > ../backend.log 2>&1 &
+          echo "Backend started"
+
+      - name: Start frontend
+        working-directory: salon-samochodowy-frontend
+        run: |
+          npm start > ../frontend.log 2>&1 &
+          echo "Frontend started"
+
+      - name: Wait for backend and frontend
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:3000/ > /dev/null; then
+              echo "Backend is ready"
+              break
+            fi
+            echo "Waiting for backend..."
+            sleep 2
+          done
+
+          for i in {1..90}; do
+            if curl -fsS http://localhost:4200/ > /dev/null; then
+              echo "Frontend is ready"
+              break
+            fi
+            echo "Waiting for frontend..."
+            sleep 2
+          done
+
+          curl -fsS http://localhost:3000/ > /dev/null
+          curl -fsS http://localhost:4200/ > /dev/null
+
+      - name: Run Playwright tests
+        working-directory: Playwright
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: Playwright/playwright-report/
+          retention-days: 30
+
+      - name: Print app logs on failure
+        if: failure()
+        run: |
+          echo "===== backend.log ====="
+          cat backend.log || true
+          echo "===== frontend.log ====="
+          cat frontend.log || true
