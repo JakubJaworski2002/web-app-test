@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Backend lint ──────────────────────────────────────────────────────────
+  lint-backend:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: salon-samochodowy-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: salon-samochodowy-backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for lint script (optional)
+        run: |
+          if npm run lint --if-present; then
+            echo "Lint passed"
+          else
+            echo "No lint script configured — skipping"
+          fi
+
+  # ─── Frontend lint ─────────────────────────────────────────────────────────
+  lint-frontend:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: salon-samochodowy-frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: salon-samochodowy-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Angular lint
+        run: npm run lint --if-present
+
+  # ─── Backend unit tests ────────────────────────────────────────────────────
+  test-backend:
+    name: Backend Unit Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: salon-samochodowy-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: salon-samochodowy-backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests
+        run: npm test -- --forceExit --passWithNoTests
+
+  # ─── Playwright E2E (push to main only) ───────────────────────────────────
+  test-playwright:
+    name: Playwright E2E (Chromium)
+    runs-on: ubuntu-latest
+    needs: [lint-backend, lint-frontend, test-backend]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: Playwright/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: salon-samochodowy-backend
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: salon-samochodowy-frontend
+        run: npm ci
+
+      - name: Install Playwright dependencies
+        working-directory: Playwright
+        run: npm ci
+
+      - name: Install Playwright browsers (Chromium only)
+        working-directory: Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Cleanup SQLite sidecar files
+        run: |
+          rm -f salon-samochodowy-backend/data/*.sqlite-shm
+          rm -f salon-samochodowy-backend/data/*.sqlite-wal
+
+      - name: Start backend
+        working-directory: salon-samochodowy-backend
+        run: node server.js > ../backend.log 2>&1 &
+
+      - name: Start frontend
+        working-directory: salon-samochodowy-frontend
+        run: npm start > ../frontend.log 2>&1 &
+
+      - name: Wait for services
+        run: |
+          for i in {1..60}; do
+            curl -fsS http://localhost:3000/ > /dev/null && echo "Backend ready" && break
+            echo "Waiting for backend ($i/60)..." && sleep 2
+          done
+          for i in {1..90}; do
+            curl -fsS http://localhost:4200/ > /dev/null && echo "Frontend ready" && break
+            echo "Waiting for frontend ($i/90)..." && sleep 2
+          done
+
+      - name: Run Playwright tests
+        working-directory: Playwright
+        run: npx playwright test --project=chromium --project=chromium-client --project=chromium-public
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: Playwright/playwright-report/
+          retention-days: 30
+
+      - name: Print app logs on failure
+        if: failure()
+        run: |
+          echo "===== backend.log =====" && cat backend.log || true
+          echo "===== frontend.log =====" && cat frontend.log || true

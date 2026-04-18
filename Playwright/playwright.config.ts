@@ -1,69 +1,65 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+const ADMIN_AUTH_FILE = path.join(__dirname, '.auth/admin.json');
+const CLIENT_AUTH_FILE = path.join(__dirname, '.auth/client.json');
+const PUBLIC_AUTH_FILE = path.join(__dirname, '.auth/public.json');
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'http://localhost:4200',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+  use: {
+    baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
 
-  /* Configure projects for major browsers */
   projects: [
+    // Project 1: Setup – runs global.setup.ts to create auth state
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'setup',
+      testMatch: '**/global.setup.ts',
     },
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    // Project 2: Tests running as authenticated admin (skips UI login)
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: ADMIN_AUTH_FILE,
+      },
+      testIgnore: ['**/global.setup.ts', '**/auth-state-client.spec.ts', '**/auth-state-public.spec.ts'],
+      dependencies: ['setup'],
+    },
 
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    // Project 3: Tests running as authenticated client
+    {
+      name: 'chromium-client',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: CLIENT_AUTH_FILE,
+      },
+      testMatch: ['**/auth-state-client.spec.ts'],
+      testIgnore: ['**/global.setup.ts'],
+      dependencies: ['setup'],
+    },
+
+    // Project 4: Tests that need unauthenticated state
+    {
+      name: 'chromium-public',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: PUBLIC_AUTH_FILE,
+      },
+      testMatch: ['**/auth-state-public.spec.ts', '**/Case_5_AG.spec.ts', '**/Case_7_NJ.spec.ts'],
+      testIgnore: ['**/global.setup.ts'],
+      dependencies: ['setup'],
+    },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
