@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Subject } from 'rxjs';
@@ -14,74 +14,100 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-login-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login-register.component.html',
   styleUrls: ['./login-register.component.css']
 })
-export class LoginRegisterComponent implements OnDestroy {
+export class LoginRegisterComponent implements OnInit, OnDestroy {
   
   isLoginMode: boolean = true;
-  username: string = '';
-  email: string = '';
-  password: string = '';
-  firstName: string = '';
-  lastName: string = '';
   errorMessage: string = '';
   successMessage: string = '';
+
+  loginForm!: FormGroup;
+  registerForm!: FormGroup;
   
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthenticationService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    const passwordValidators = [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/)
+    ];
+    const usernameValidators = [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(30)
+    ];
+
+    this.loginForm = this.fb.group({
+      username: ['', usernameValidators],
+      password: ['', passwordValidators]
+    });
+
+    this.registerForm = this.fb.group({
+      username: ['', usernameValidators],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', passwordValidators],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]]
+    });
+  }
+
+  get activeForm(): FormGroup {
+    return this.isLoginMode ? this.loginForm : this.registerForm;
+  }
 
   toggleMode(): void {
     this.isLoginMode = !this.isLoginMode;
     this.errorMessage = '';
     this.successMessage = '';
-    // Resetowanie pól formularza przy przełączaniu trybu
-    this.username = '';
-    this.email = '';
-    this.password = '';
-    this.firstName = '';
-    this.lastName = '';
+    this.loginForm.reset();
+    this.registerForm.reset();
   }
 
-  onSubmit(form: NgForm): void {
+  onSubmit(): void {
+    const form = this.activeForm;
     if (form.invalid) {
-      // Formularz jest nieprawidłowy, nie wykonuj żadnych akcji
+      form.markAllAsTouched();
       return;
     }
 
     if (this.isLoginMode) {
-      this.authService.login(this.username, this.password)
+      const { username, password } = this.loginForm.value;
+      this.authService.login(username, password)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response) => {
             this.successMessage = response.message;
             this.router.navigate(['/']);
-            this.closeModal(); // Zamknięcie modalu po sukcesie
+            this.closeModal();
           },
           error: (error) => {
             console.error('Nie udało się zalogować. Sprawdź login i hasło i spróbuj jeszcze raz:', error);
-            // Dostosuj do struktury błędu zwracającego API
             this.errorMessage = error.error?.message || 'Nie udało się zalogować. Sprawdź login i hasło i spróbuj jeszcze raz';
           }
         });
     } else {
-      this.authService.register(this.username, this.email, this.password, this.firstName, this.lastName)
+      const { username, email, password, firstName, lastName } = this.registerForm.value;
+      this.authService.register(username, email, password, firstName, lastName)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response) => {
             this.successMessage = response.message;
-            // Opcjonalne automatyczne logowanie po rejestracji
-            this.authService.login(this.username, this.password)
+            this.authService.login(username, password)
               .pipe(takeUntil(this.destroy$))
               .subscribe({
                 next: () => {
                   this.router.navigate(['/']);
-                  this.closeModal(); // Zamknięcie modalu po sukcesie
+                  this.closeModal();
                 },
                 error: (error) => {
                   console.error('Błąd logowania po rejestracji:', error);
@@ -122,12 +148,8 @@ export class LoginRegisterComponent implements OnDestroy {
         newModal.hide();
       }
     }
-    // Resetowanie formularza
-    this.username = '';
-    this.email = '';
-    this.password = '';
-    this.firstName = '';
-    this.lastName = '';
+    this.loginForm.reset();
+    this.registerForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
   }

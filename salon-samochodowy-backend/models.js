@@ -176,10 +176,44 @@ const User = sequelize.define('User', {
     },
     isDealer: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true,
+        defaultValue: false, // INC-002: było true — każdy nowy user stawał się dealerem
     },
 }, {
     timestamps: false, 
+});
+
+const Transaction = sequelize.define('Transaction', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    carId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    type: {
+        type: Sequelize.ENUM('rent', 'return', 'leasing', 'buy'),
+        allowNull: false,
+    },
+    totalAmount: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+    },
+    monthlyRate: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+    },
+    notes: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+}, {
+    timestamps: true,
 });
 
 /**
@@ -197,6 +231,11 @@ Car.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
 
 User.hasMany(Car, { as: 'carsRented', foreignKey: 'renterId' });
 Car.belongsTo(User, { as: 'renter', foreignKey: 'renterId' });
+
+Transaction.belongsTo(Car, { foreignKey: 'carId', as: 'car' });
+Transaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Car.hasMany(Transaction, { foreignKey: 'carId', as: 'transactions' });
+User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
 
 /**
  * @api {function} syncDatabase Synchronizacja bazy danych
@@ -216,4 +255,4 @@ try {
     console.error('Database synchronization error:', err);
 }
 
-export { sequelize, Car, User };
+export { sequelize, Car, User, Transaction };

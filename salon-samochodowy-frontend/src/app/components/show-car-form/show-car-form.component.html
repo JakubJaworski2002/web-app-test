@@ -8,10 +8,14 @@
       formControlName="brand"
       name="brand"
     />
-    @if(showcarform.get('brand')?.invalid && (showcarform.get('brand')?.dirty || showcarform.get('brand')?.touched))
-    {
-      <p class="text-danger text-center">Marka jest wymagana</p>
+    @if(showcarform.get('brand')?.invalid && (showcarform.get('brand')?.dirty || showcarform.get('brand')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('brand')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('brand')?.errors?.['minlength']) { <p>Min. 2 znaki.</p> }
+        @if(showcarform.get('brand')?.errors?.['maxlength']) { <p>Maks. 50 znaków.</p> }
+      </div>
     }
+
     <label for="model">Model</label>
     <input
       type="text"
@@ -19,10 +23,13 @@
       formControlName="model"
       name="model"
     />
-    @if(showcarform.get('model')?.invalid && (showcarform.get('model')?.dirty || showcarform.get('model')?.touched))
-    {
-      <p class="text-danger text-center">Model jest wymagana</p>
+    @if(showcarform.get('model')?.invalid && (showcarform.get('model')?.dirty || showcarform.get('model')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('model')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('model')?.errors?.['maxlength']) { <p>Maks. 50 znaków.</p> }
+      </div>
     }
+
     <label for="year">Rok</label>
     <input
       type="number"
@@ -30,10 +37,14 @@
       formControlName="year"
       name="year"
     />
-    @if(showcarform.get('year')?.invalid && (showcarform.get('year')?.dirty || showcarform.get('year')?.touched))
-    {
-      <p class="text-danger text-center">Błędny rok, min 1886</p>
+    @if(showcarform.get('year')?.invalid && (showcarform.get('year')?.dirty || showcarform.get('year')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('year')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('year')?.errors?.['min']) { <p>Rok nie może być wcześniejszy niż 1900.</p> }
+        @if(showcarform.get('year')?.errors?.['max']) { <p>Rok nie może być późniejszy niż 2030.</p> }
+      </div>
     }
+
     <label for="vin">VIN</label>
     <input
       type="text"
@@ -41,10 +52,13 @@
       formControlName="vin"
       name="vin"
     />
-    @if(showcarform.get('vin')?.invalid && (showcarform.get('vin')?.dirty || showcarform.get('vin')?.touched))
-    {
-      <p class="text-danger text-center">Błędny VIN, użyj tylko cyfr i dużych liter bez O oraz I</p>
+    @if(showcarform.get('vin')?.invalid && (showcarform.get('vin')?.dirty || showcarform.get('vin')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('vin')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('vin')?.errors?.['pattern']) { <p>Nieprawidłowy VIN (17 znaków, tylko cyfry i duże litery bez I, O, Q).</p> }
+      </div>
     }
+
     <label for="price">Cena</label>
     <input
       type="number"
@@ -52,10 +66,14 @@
       formControlName="price"
       name="price"
     />
-    @if(showcarform.get('price')?.invalid && (showcarform.get('price')?.dirty || showcarform.get('price')?.touched))
-    {
-      <p class="text-danger text-center">Cena musi być liczbą dodatnią</p>
+    @if(showcarform.get('price')?.invalid && (showcarform.get('price')?.dirty || showcarform.get('price')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('price')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('price')?.errors?.['min']) { <p>Cena musi być większa od 0.</p> }
+        @if(showcarform.get('price')?.errors?.['max']) { <p>Cena nie może przekraczać 99 999 999.</p> }
+      </div>
     }
+
     <label for="horsePower">Moc</label>
     <input
       type="number"
@@ -63,10 +81,14 @@
       formControlName="horsePower"
       name="horsePower"
     />
-    @if(showcarform.get('horsePower')?.invalid && (showcarform.get('horsePower')?.dirty || showcarform.get('horsePower')?.touched))
-    {
-      <p class="text-danger text-center">Moc nie może być mniejsza od 1</p>
+    @if(showcarform.get('horsePower')?.invalid && (showcarform.get('horsePower')?.dirty || showcarform.get('horsePower')?.touched)) {
+      <div class="text-danger text-center">
+        @if(showcarform.get('horsePower')?.errors?.['required']) { <p>Pole jest wymagane.</p> }
+        @if(showcarform.get('horsePower')?.errors?.['min']) { <p>Moc nie może być mniejsza od 1 KM.</p> }
+        @if(showcarform.get('horsePower')?.errors?.['max']) { <p>Moc nie może przekraczać 3000 KM.</p> }
+      </div>
     }
+
     <label for="isAvailableForRent">
       Dostępny do wynajmu
       <input
@@ -80,8 +102,6 @@
       Dodaj zdjęcie
       <input type="file" (change)="onFileSelected($event)" id="image" />
     </label>
-
-
 
     <div class="add-car-form-buttons">
       <button type="submit" [disabled]="showcarform.invalid">Zapisz</button>

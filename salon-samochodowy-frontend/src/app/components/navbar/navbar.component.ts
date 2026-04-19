@@ -1,15 +1,15 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { LoginRegisterComponent } from '../login-register/login-register.component';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs';
-
-
 import { CustomerListComponent } from '../customer-list/customer-list.component';
 import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Car, CarService } from '../../services/car.service';
 import { ShowCarForm } from '../show-car-form/show-car-form.component';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * @module NavbarComponent
@@ -26,6 +26,7 @@ import { ShowCarForm } from '../show-car-form/show-car-form.component';
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     LoginRegisterComponent,
     CustomerListComponent,
     AddCustomerComponent,
@@ -79,6 +80,8 @@ export class NavbarComponent implements OnDestroy {
    * @description
    * Inicjalizuje komponent, subskrybuje strumień aktualnego użytkownika i ustawia właściwość `currentUser`.
    */
+  private notify = inject(NotificationService);
+
   constructor(
     private authService: AuthenticationService,
     private dialog: MatDialog,
@@ -126,7 +129,7 @@ export class NavbarComponent implements OnDestroy {
       },
       error: (error) => {
         console.error('Błąd podczas wylogowywania:', error);
-        alert('Nie udało się wylogować. Spróbuj ponownie.');
+        this.notify.error('Nie udało się wylogować. Spróbuj ponownie.');
       },
     });
   }
@@ -155,27 +158,15 @@ export class NavbarComponent implements OnDestroy {
   addCar() {
     this.carService.addCar(this.car).subscribe(
       (newCar) => {
-        console.log('Nowy samochód dodany:', newCar);
-        alert('Samochód został dodany!');
+        this.notify.success('Samochód został dodany!');
       },
       (error) => {
         console.error('Błąd przy dodawaniu samochodu:', error);
-        alert('Wystąpił błąd przy dodawaniu samochodu.');
+        this.notify.error('Wystąpił błąd przy dodawaniu samochodu.');
       }
     );
   }
 
-  /**
-   * @method
-   * @name openAddCarDialog
-   * @description
-   * Otwiera okno dialogowe z formularzem dodawania samochodu. Po zamknięciu dialogu, jeśli wynik jest dostępny, aktualizuje obiekt `car` i wywołuje metodę `addCar`.
-   *
-   * @example
-   * ```typescript
-   * this.openAddCarDialog();
-   * ```
-   */
   openAddCarDialog(): void {
     const dialogRef = this.dialog.open(ShowCarForm, {
         width: '600px',
@@ -188,14 +179,15 @@ export class NavbarComponent implements OnDestroy {
             this.carService.addCar(car).subscribe(newCar => {
                 if (file) {
                     this.carService.uploadCarImage(newCar.id, file).subscribe(() => {
-                        alert('Samochód i zdjęcie zostały dodane!');
+                        this.notify.success('Samochód i zdjęcie zostały dodane!');
                     });
                 } else {
-                    alert('Samochód został dodany1!');
-                    console.log(car);
+                    this.notify.success('Samochód został dodany!');
                 }
+            }, () => {
+                this.notify.error('Wystąpił błąd przy dodawaniu samochodu.');
             });
         }
     });
-}
+  }
 }

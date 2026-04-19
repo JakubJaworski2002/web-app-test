@@ -19,6 +19,12 @@ await jest.unstable_mockModule('../models.js', () => ({
         findAll:  jest.fn().mockResolvedValue([]),
         create:   jest.fn(),
     },
+    Transaction: {
+        findAll: jest.fn().mockResolvedValue([]),
+        create: jest.fn(),
+        findByPk: jest.fn(),
+        destroy: jest.fn(),
+    },
     sequelize: {},
 }));
 

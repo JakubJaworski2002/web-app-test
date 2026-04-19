@@ -60,7 +60,7 @@ export class AuthenticationService {
    * Jeśli żądanie zakończy się błędem, ustawia currentUserSubject na null.
    */
   private checkCurrentUser(): void {
-    this.http.get<{ user: User }>(`${this.apiUrl}/current-user`, { withCredentials: true })
+    this.http.get<{ user: User }>(`${this.apiUrl}/api/v1/auth/profile`, { withCredentials: true })
       .pipe(
         tap(response => {
           this.currentUserSubject.next(response.user);
@@ -88,7 +88,7 @@ export class AuthenticationService {
    */
   register(username: string, email: string, password: string, firstName: string, lastName: string): Observable<any> {
     return this.http.post<{ user: User }>(
-      `${this.apiUrl}/register`,
+      `${this.apiUrl}/api/v1/auth/register`,
       { username, email, password, firstName, lastName },
       { withCredentials: true }
     ).pipe(
@@ -110,7 +110,7 @@ export class AuthenticationService {
    */
   login(username: string, password: string): Observable<any> {
     return this.http.post<{ user: User }>(
-      `${this.apiUrl}/login`,
+      `${this.apiUrl}/api/v1/auth/login`,
       { username, password },
       { withCredentials: true }
     ).pipe(
@@ -130,7 +130,7 @@ export class AuthenticationService {
    */
   logout(): Observable<any> {
     return this.http.post<{ message: string }>(
-      `${this.apiUrl}/logout`,
+      `${this.apiUrl}/api/v1/auth/logout`,
       {},
       { withCredentials: true }
     ).pipe(

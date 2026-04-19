@@ -1,1 +1,122 @@
-<p>car-detail works!</p>
+<div class="container py-4">
+
+  <!-- Przycisk powrotu -->
+  <div class="back-btn">
+    <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
+      ← Wróć
+    </button>
+  </div>
+
+  @if (car) {
+    <div class="card shadow-sm">
+
+      <!-- Zdjęcie samochodu lub placeholder -->
+      @if (car.image) {
+        <img [src]="car.image" [alt]="car.brand + ' ' + car.model"
+             class="card-img-top" style="max-height: 400px; object-fit: cover;">
+      } @else {
+        <div class="car-placeholder-large d-flex align-items-center justify-content-center">
+          <i class="bi bi-car-front" style="font-size: 5rem; color: #adb5bd;"></i>
+        </div>
+      }
+
+      <div class="card-body">
+        <h2 class="card-title mb-4">{{ car.brand }} {{ car.model }}</h2>
+
+        <!-- Tabela specyfikacji technicznych -->
+        <table class="table table-bordered spec-table mb-4">
+          <thead class="table-light">
+            <tr>
+              <th>Specyfikacja</th>
+              <th>Wartość</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Marka</td>
+              <td>{{ car.brand }}</td>
+            </tr>
+            <tr>
+              <td>Model</td>
+              <td>{{ car.model }}</td>
+            </tr>
+            <tr>
+              <td>Rok produkcji</td>
+              <td>{{ car.year }}</td>
+            </tr>
+            <tr>
+              <td>Numer VIN</td>
+              <td><code>{{ car.vin }}</code></td>
+            </tr>
+            <tr>
+              <td>Moc silnika</td>
+              <td>{{ car.horsePower }} KM</td>
+            </tr>
+            <tr>
+              <td>Cena</td>
+              <td><strong>{{ car.price | number:'1.0-0' }} PLN</strong></td>
+            </tr>
+            <tr>
+              <td>Dostępny do wynajmu</td>
+              <td>
+                @if (car.isAvailableForRent) {
+                  <span class="badge bg-success">Tak</span>
+                } @else {
+                  <span class="badge bg-secondary">Nie</span>
+                }
+              </td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>
+                @if (car.ownerId != null) {
+                  <span class="badge bg-danger">Sprzedany</span>
+                } @else if (car.renterId != null) {
+                  <span class="badge bg-warning text-dark">Wynajęty</span>
+                } @else {
+                  <span class="badge bg-success">Dostępny</span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Przyciski akcji (tylko dla zalogowanych użytkowników) -->
+        @if (isLoggedIn) {
+          <div class="mt-3">
+            @if (!isDealer) {
+              <!-- Akcje dla klienta -->
+              <div class="d-flex flex-wrap gap-3">
+                @if (car.ownerId == null) {
+                  <app-buy-car [car]="car"></app-buy-car>
+                }
+                @if (car.isAvailableForRent && car.renterId == null) {
+                  <app-rent-car [car]="car"></app-rent-car>
+                }
+                @if (car.ownerId == null) {
+                  <calculate-leasing [car]="car"></calculate-leasing>
+                }
+              </div>
+            } @else {
+              <!-- Akcje dla dealera -->
+              <div class="d-flex flex-wrap gap-3">
+                <edit-car [car]="car"></edit-car>
+                <button class="btn btn-danger" (click)="deleteCar()">
+                  <i class="bi bi-trash me-1"></i>Usuń samochód
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-hourglass-split" style="font-size: 2rem;"></i>
+      <p class="mt-2">Ładowanie danych samochodu...</p>
+    </div>
+  }
+
+</div>
+

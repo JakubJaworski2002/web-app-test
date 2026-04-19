@@ -7,6 +7,7 @@
     "@types/node": "^25.5.0"
   },
   "scripts": {
+    "setup:mock": "node setup-mock.js",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:list": "playwright test --list"

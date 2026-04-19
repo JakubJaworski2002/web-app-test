@@ -33,6 +33,13 @@
       <!-- Przycisk "Customer List", "Add Customer" i "Add Car" widoczne tylko dla dealerów -->
       @if(currentUser?.isDealer)
       {
+          <a
+            class="btn btn-light me-2"
+            routerLink="/dashboard"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+          </a>
           <button
             class="btn btn-light me-2"
             type="button"
@@ -71,9 +78,18 @@
       }
       @if(currentUser)
       {
-          <span class="me-3" style="color: white;"
-            >Witaj, {{ currentUser.firstName }}!</span
+          <a
+            class="btn btn-outline-light me-2"
+            routerLink="/transactions"
           >
+            <i class="bi bi-clock-history me-1"></i>Historia transakcji
+          </a>
+          <span class="me-3" style="color: white;">
+            Witaj, <strong>{{ currentUser.firstName || currentUser.username }}</strong>!
+            @if(currentUser.isDealer) {
+              <span class="badge bg-primary ms-1">Dealer</span>
+            }
+          </span>
           <button
             class="btn btn-light"
             type="button"

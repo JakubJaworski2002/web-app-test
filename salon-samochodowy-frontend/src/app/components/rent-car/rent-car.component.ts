@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * RentCarComponent umożliwia użytkownikom wypożyczanie oraz zwracanie samochodów.
@@ -61,20 +62,10 @@ export class RentCarComponent implements OnDestroy {
    */
   private destroy$ = new Subject<void>();
 
-  /**
-   * Serwis do zarządzania danymi samochodów.
-   */
   private carService = inject(CarService);
-
-  /**
-   * Serwis uwierzytelniania.
-   */
   private authService = inject(AuthenticationService);
+  private notify = inject(NotificationService);
 
-  /**
-   * Konstruktor komponentu.
-   * Inicjalizuje obserwację, czy aktualny użytkownik jest wypożyczającym samochód.
-   */
   constructor() {
     this.isRenter$ = combineLatest([
       this.authService.currentUser$,
@@ -84,38 +75,30 @@ export class RentCarComponent implements OnDestroy {
     );
   }
 
-  /**
-   * Metoda wypożyczająca samochód.
-   * Wysyła żądanie wypożyczenia samochodu do serwisu CarService i obsługuje odpowiedzi oraz błędy.
-   */
   rentCar(): void {
     this.carService.rentCar(this.car.id).pipe(takeUntil(this.destroy$)).subscribe(
       (carId: number) => {
         console.log('Wypożyczono samochód o id:', carId);
-        alert('Samochód został wypożyczony');
+        this.notify.success('Samochód został wypożyczony');
         this.car.isAvailableForRent = false;
       },
       (error: any) => {
         console.error('Błąd przy wypożyczaniu samochodu:', error);
-        alert('Wystąpił błąd przy wypożyczaniu samochodu.');
+        this.notify.error('Wystąpił błąd przy wypożyczaniu samochodu.');
       }
     );
   }
 
-  /**
-   * Metoda zwracająca samochód.
-   * Wysyła żądanie zwrotu samochodu do serwisu CarService i obsługuje odpowiedzi oraz błędy.
-   */
   returnCar(): void {
     this.carService.returnCar(this.car.id).pipe(takeUntil(this.destroy$)).subscribe(
       (carId: number) => {
         console.log('Zwrócono samochód o id:', carId);
-        alert('Samochód został zwrócony');
+        this.notify.success('Samochód został zwrócony');
         this.car.isAvailableForRent = true;
       },
       (error: any) => {
         console.error('Błąd przy zwracaniu samochodu:', error);
-        alert('Wystąpił błąd przy zwracaniu samochodu.');
+        this.notify.error('Wystąpił błąd przy zwracaniu samochodu.');
       }
     );
   }

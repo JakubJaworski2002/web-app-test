@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule, Location } from '@angular/common';
 import { CarService, Car } from '../../services/car.service';
+import { AuthenticationService, User } from '../../services/authentication.service';
 import { Subscription } from 'rxjs';
+import { BuyCarComponent } from '../buy-car/buy-car.component';
+import { RentCarComponent } from '../rent-car/rent-car.component';
+import { CalculateLeasingComponent } from '../calculate-leasing/calculate-leasing.component';
+import { EditCarComponent } from '../edit-car/edit-car.component';
 
 /**
  * CarDetailComponent wyświetla szczegółowe informacje o wybranym samochodzie.
@@ -12,53 +17,38 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-car-detail',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div *ngIf="car">
-      <h2>{{ car.brand }} {{ car.model }}</h2>
-      <p><strong>Rok:</strong> {{ car.year }}</p>
-      <p><strong>Moc:</strong> {{ car.horsePower }} KM</p>
-      <p><strong>VIN:</strong> {{ car.vin }}</p>
-      <p><strong>Cena:</strong> {{ car.price | currency: 'PLN' }}</p>
-      <p>
-        <strong>Dostępny do wynajmu:</strong>
-        <span [ngClass]="car.isAvailableForRent ? 'text-success' : 'text-danger'">
-          {{ car.isAvailableForRent ? 'Tak' : 'Nie' }}
-        </span>
-      </p>
-    </div>
-  `,
+  imports: [CommonModule, BuyCarComponent, RentCarComponent, CalculateLeasingComponent, EditCarComponent],
+  templateUrl: './car-detail.component.html',
   styleUrls: ['./car-detail.component.css'],
 })
-export class CarDetailComponent implements OnInit {
-  
+export class CarDetailComponent implements OnInit, OnDestroy {
+
   /**
    * Obiekt reprezentujący szczegółowe informacje o samochodzie.
    * @type {Car | undefined}
    */
   car?: Car;
 
-  /**
-   * Subskrypcja na parametry trasy, umożliwiająca odsubskrybowanie w przypadku konieczności.
-   * @type {Subscription}
-   */
-  private routeSubscription?: Subscription;
+  /** Czy samochód nie posiada zdjęcia. */
+  noImage = false;
 
-  /**
-   * Konstruktor komponentu.
-   *
-   * @param {ActivatedRoute} route - Serwis umożliwiający dostęp do informacji o aktualnie aktywnej trasie.
-   * @param {CarService} carService - Serwis do zarządzania danymi samochodów.
-   */
+  /** Czy użytkownik jest zalogowany. */
+  isLoggedIn = false;
+
+  /** Czy zalogowany użytkownik jest dealerem. */
+  isDealer = false;
+
+  private routeSubscription?: Subscription;
+  private authSubscription?: Subscription;
+
   constructor(
     private route: ActivatedRoute,
-    private carService: CarService
+    private router: Router,
+    private location: Location,
+    private carService: CarService,
+    private authService: AuthenticationService
   ) {}
 
-  /**
-   * Metoda inicjalizacyjna wywoływana po utworzeniu komponentu.
-   * Pobiera identyfikator samochodu z parametrów trasy i ładuje jego szczegóły.
-   */
   ngOnInit(): void {
     this.routeSubscription = this.route.params.subscribe(params => {
       const carId = Number(params['id']);
@@ -68,29 +58,41 @@ export class CarDetailComponent implements OnInit {
         console.error('Nieprawidłowy identyfikator samochodu:', params['id']);
       }
     });
+
+    this.authSubscription = this.authService.currentUser$.subscribe((user: User | null) => {
+      this.isLoggedIn = user !== null;
+      this.isDealer = user?.isDealer ?? false;
+    });
   }
 
-  /**
-   * Metoda pobierająca szczegółowe informacje o samochodzie na podstawie jego identyfikatora.
-   *
-   * @param {number} carId - Unikalny identyfikator samochodu.
-   */
+  /** Navigates back in browser history. */
+  goBack(): void {
+    this.location.back();
+  }
+
+  /** Deletes the current car after confirmation and redirects to the car list. */
+  deleteCar(): void {
+    if (this.car && confirm(`Czy na pewno chcesz usunąć samochód ${this.car.brand} ${this.car.model}?`)) {
+      this.carService.deleteCar(this.car.id).subscribe(() => {
+        this.router.navigate(['/cars']);
+      });
+    }
+  }
+
   private fetchCarDetails(carId: number): void {
     this.carService.getCar(carId).subscribe(
       (car: Car) => {
         this.car = car;
+        this.noImage = !car?.image;
       },
       (error) => {
         console.error('Błąd podczas pobierania szczegółów samochodu:', error);
-        // Można tutaj dodać obsługę błędów, np. wyświetlenie komunikatu użytkownikowi
       }
     );
   }
 
-  /**
-   * Metoda czyszcząca subskrypcje przy niszczeniu komponentu, aby zapobiec wyciekom pamięci.
-   */
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.authSubscription?.unsubscribe();
   }
 }

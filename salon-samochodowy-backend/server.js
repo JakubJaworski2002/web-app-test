@@ -2,13 +2,22 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session'; // Import express-session
-import { Car, User } from './models.js';
+import { sequelize, Car, User, Transaction } from './models.js';
 import { Op } from 'sequelize';
 import { body, param, validationResult } from 'express-validator'; // Import express-validator
 import multer from 'multer';
 import path from 'path';
+import bcrypt from 'bcrypt';
+import rateLimit from 'express-rate-limit';
+
+const SALT_ROUNDS = 12;
+
+if (!process.env.SESSION_SECRET) {
+    console.warn('OSTRZEŻENIE: SESSION_SECRET nie jest ustawiony. Używam domyślnego klucza – NIE UŻYWAJ W PRODUKCJI!');
+}
 
 const app = express();
+const carsRouter = express.Router();
 const PORT = process.env.PORT || 3000;
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -28,16 +37,35 @@ const upload = multer({ storage });
 // Middleware
 app.use(bodyParser.json());
 
-// Konfiguracja CORS
+// Konfiguracja CORS (INC-006: użyj zmiennej środowiskowej)
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:4200').split(',');
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS: niedozwolone origin'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
 
+// Rate limiting (INC-005)
+const isTestLikeEnv = process.env.CI === 'true' || process.env.PLAYWRIGHT === 'true' || process.env.NODE_ENV === 'test';
+const authRateLimitMax = Number(process.env.AUTH_RATE_LIMIT_MAX || (isTestLikeEnv ? 2000 : 20));
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minut
+    max: authRateLimitMax,
+    message: { error: 'Zbyt wiele prób logowania. Spróbuj ponownie za 15 minut.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // Konfiguracja sesji
 app.use(session({
-    secret: 'TwojSuperTajnyKlucz', // Powinno być przechowywane w zmiennych środowiskowych
+    secret: process.env.SESSION_SECRET || 'TwojSuperTajnyKlucz',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -69,7 +97,16 @@ app.get('/', (req, res) => {
     res.send('Witamy w API Zarządzanie Samochodami!');
 });
 
-app.post('/register', [
+app.get('/health', async (req, res) => {
+    try {
+        await sequelize.authenticate();
+        res.json({ status: 'ok', db: 'connected', uptime: process.uptime(), timestamp: new Date().toISOString() });
+    } catch {
+        res.status(503).json({ status: 'error', db: 'disconnected' });
+    }
+});
+
+app.post('/register', authLimiter, [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
@@ -99,11 +136,12 @@ app.post('/register', [
             return res.status(400).json({ error: 'Adres e-mail jest już zajęty' });
         }
 
-        // Tworzenie nowego użytkownika (bez haszowania hasła)
+        // Tworzenie nowego użytkownika z hashowanym hasłem (INC-001)
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
         const newUser = await User.create({
             username,
             email,
-            password,
+            password: hashedPassword,
             firstName,
             lastName,
             isDealer: false // Rejestracja publiczna tworzy klienta, nie dealera
@@ -129,7 +167,7 @@ app.post('/register', [
     }
 });
 
-app.post('/login', [
+app.post('/login', authLimiter, [
     body('username')
         .isString().withMessage('Nazwa użytkownika musi być tekstem')
         .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
@@ -148,8 +186,9 @@ app.post('/login', [
             return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
         }
 
-        // Sprawdź hasło (bez haszowania)
-        if (user.password !== password) {
+        // Sprawdź hasło z bcrypt (INC-001)
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
             return res.status(400).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
         }
 
@@ -186,8 +225,27 @@ app.post('/logout', (req, res) => {
     }
 });
 
-app.get('/cars', async (req, res) => {
+carsRouter.get('/', async (req, res) => {
     try {
+        const { page, limit } = req.query;
+        if (page !== undefined && limit !== undefined) {
+            const pageNum = parseInt(page, 10);
+            const limitNum = parseInt(limit, 10);
+            if (isNaN(pageNum) || isNaN(limitNum) || pageNum < 1 || limitNum < 1) {
+                return res.status(400).json({ error: 'page and limit must be positive integers' });
+            }
+            const offset = (pageNum - 1) * limitNum;
+            const { count, rows } = await Car.findAndCountAll({ limit: limitNum, offset });
+            return res.json({
+                data: rows,
+                pagination: {
+                    page: pageNum,
+                    limit: limitNum,
+                    total: count,
+                    totalPages: Math.ceil(count / limitNum),
+                },
+            });
+        }
         const cars = await Car.findAll();
         res.json(cars);
     } catch (error) {
@@ -195,7 +253,7 @@ app.get('/cars', async (req, res) => {
     }
 });
 
-app.get('/cars/:id', [
+carsRouter.get('/:id', [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -212,7 +270,7 @@ app.get('/cars/:id', [
     }
 });
 
-app.post('/cars', authenticateSession, [
+carsRouter.post('/', authenticateSession, [
     body('brand')
         .isString().withMessage('Marka musi być tekstem')
         .notEmpty().withMessage('Marka jest wymagana'),
@@ -249,7 +307,7 @@ app.post('/cars', authenticateSession, [
         console.log(error)
     }
 });
-app.post('/cars/:id/upload', upload.single('image'), async (req, res) => {
+carsRouter.post('/:id/upload', authenticateSession, upload.single('image'), async (req, res) => {
     try {
         const car = await Car.findByPk(req.params.id);
         if (!car) {
@@ -260,7 +318,7 @@ app.post('/cars/:id/upload', upload.single('image'), async (req, res) => {
         car.image = req.file.path;
         await car.save();
 
-        res.status(200).json({ message: 'Zdjęcie dodane pomyślnie', imagePath: car.imagePath });
+        res.status(200).json({ message: 'Zdjęcie dodane pomyślnie', imagePath: car.image });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -268,7 +326,7 @@ app.post('/cars/:id/upload', upload.single('image'), async (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 
-app.put('/cars/:id', authenticateSession, [
+carsRouter.put('/:id', authenticateSession, [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     body('brand')
@@ -311,7 +369,7 @@ app.put('/cars/:id', authenticateSession, [
     }
 });
 
-app.delete('/cars/:id', authenticateSession, [
+carsRouter.delete('/:id', authenticateSession, [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -427,7 +485,7 @@ app.delete('/users/:id', authenticateSession, [
     }
 });
 
-app.post('/cars/:id/rent', authenticateSession, [
+carsRouter.post('/:id/rent', authenticateSession, [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -458,7 +516,7 @@ app.post('/cars/:id/rent', authenticateSession, [
     }
 });
 
-app.post('/cars/:id/return', authenticateSession, [
+carsRouter.post('/:id/return', authenticateSession, [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -493,7 +551,7 @@ app.post('/cars/:id/return', authenticateSession, [
     }
 });
 
-app.get('/cars/:id/renter', [
+carsRouter.get('/:id/renter', [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -513,7 +571,7 @@ app.get('/cars/:id/renter', [
     }
 });
 
-app.post('/cars/:id/buy', authenticateSession, [
+carsRouter.post('/:id/buy', authenticateSession, [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     handleValidationErrors
@@ -559,7 +617,7 @@ app.get('/current-user', authenticateSession, async (req, res) => {
     }
 });
 
-app.post('/cars/:id/leasing', [
+carsRouter.post('/:id/leasing', [
     param('id')
         .isInt({ min: 1 }).withMessage('ID samochodu musi być liczbą całkowitą większą lub równą 1'),
     body('downPayment')
@@ -600,6 +658,10 @@ app.post('/cars/:id/leasing', [
         res.status(500).json({ error: error.message });
     }
 });
+
+// Mount cars router at both legacy path and new API v1 path
+app.use('/cars', carsRouter);
+app.use('/api/v1/cars', carsRouter);
 
 app.post('/admin/create-customer', authenticateSession, [
     body('username')
@@ -658,6 +720,127 @@ app.post('/admin/create-customer', authenticateSession, [
                 isDealer: newUser.isDealer
             }
         });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/v1/transactions', authenticateSession, async (req, res) => {
+    try {
+        const transactions = await Transaction.findAll({
+            where: { userId: req.session.userId },
+            include: [{ model: Car, as: 'car', attributes: ['id', 'brand', 'model', 'year'] }],
+            order: [['createdAt', 'DESC']],
+            limit: 50
+        });
+        res.json(transactions);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ====== API v1 Auth routes ======
+app.post('/api/v1/auth/register', authLimiter, [
+    body('username')
+        .isString().withMessage('Nazwa użytkownika musi być tekstem')
+        .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('email')
+        .isEmail().withMessage('Podaj prawidłowy adres e-mail'),
+    body('password')
+        .isString().withMessage('Hasło musi być tekstem')
+        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
+    body('firstName')
+        .notEmpty().withMessage('Imię jest wymagane'),
+    body('lastName')
+        .notEmpty().withMessage('Nazwisko jest wymagane'),
+    handleValidationErrors
+], async (req, res) => {
+    try {
+        const { username, email, password, firstName, lastName } = req.body;
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Nazwa użytkownika jest już zajęta' });
+        }
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Adres e-mail jest już zajęty' });
+        }
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        const newUser = await User.create({
+            username, email, password: hashedPassword,
+            firstName, lastName, isDealer: false
+        });
+        req.session.userId = newUser.id;
+        req.session.username = newUser.username;
+        res.status(201).json({
+            message: 'Rejestracja udana',
+            user: {
+                id: newUser.id, username: newUser.username, email: newUser.email,
+                firstName: newUser.firstName, lastName: newUser.lastName, isDealer: newUser.isDealer
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/v1/auth/login', authLimiter, [
+    body('username')
+        .isString().withMessage('Nazwa użytkownika musi być tekstem')
+        .isLength({ min: 3 }).withMessage('Nazwa użytkownika musi mieć co najmniej 3 znaki'),
+    body('password')
+        .isString().withMessage('Hasło musi być tekstem')
+        .isLength({ min: 6 }).withMessage('Hasło musi mieć co najmniej 6 znaków'),
+    handleValidationErrors
+], async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ where: { username } });
+        if (!user) {
+            return res.status(401).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: 'Nieprawidłowa nazwa użytkownika lub hasło' });
+        }
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        res.status(200).json({
+            message: 'Logowanie udane',
+            user: {
+                id: user.id, username: user.username,
+                firstName: user.firstName, lastName: user.lastName, isDealer: user.isDealer
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/v1/auth/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).json({ error: 'Nie udało się wylogować' });
+            } else {
+                res.status(200).json({ message: 'Wylogowano pomyślnie' });
+            }
+        });
+    } else {
+        res.status(400).json({ error: 'Brak aktywnej sesji' });
+    }
+});
+
+app.get('/api/v1/auth/profile', authenticateSession, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.session.userId, {
+            attributes: ['id', 'username', 'firstName', 'lastName', 'isDealer']
+        });
+        if (user) {
+            res.json({ user });
+        } else {
+            res.status(404).json({ error: 'Użytkownik nie znaleziony' });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

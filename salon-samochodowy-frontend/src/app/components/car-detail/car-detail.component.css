@@ -70,4 +70,41 @@ div {
       font-size: 1rem;
     }
   }
+
+/* Przycisk powrotu */
+.back-btn {
+  margin-bottom: 1rem;
+}
+
+/* Placeholder dla samochodu bez zdjęcia */
+.car-placeholder-large {
+  background-color: #f8f9fa;
+  height: 200px;
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+}
+
+/* Tabela specyfikacji technicznych */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.spec-table thead th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  color: #495057;
+  padding: 0.6rem 1rem;
+}
+
+.spec-table tbody td {
+  padding: 0.55rem 1rem;
+  color: #343a40;
+  vertical-align: middle;
+}
+
+.spec-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
   

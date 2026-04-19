@@ -19,6 +19,12 @@ await jest.unstable_mockModule('../models.js', () => ({
         create:   jest.fn(),
         destroy:  jest.fn(),
     },
+    Transaction: {
+        findAll: jest.fn().mockResolvedValue([]),
+        create: jest.fn(),
+        findByPk: jest.fn(),
+        destroy: jest.fn(),
+    },
     sequelize: {},
 }));
 
@@ -38,6 +44,7 @@ const { app } = await import('../server.js');
 
 const basePayload = {
     username:  'jankowalski',
+    email:     'jankowalski@example.com',
     password:  'Passw0rd!',
     firstName: 'Jan',
     lastName:  'Kowalski',
@@ -45,6 +52,7 @@ const basePayload = {
 
 const adminPayload = {
     username:  'nowyKlient',
+    email:     'nowy.klient@example.com',
     password:  'Passw0rd!',
     firstName: 'Anna',
     lastName:  'Nowak',

@@ -79,7 +79,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: Playwright
-        run: npx playwright test --project=chromium
+        run: npx playwright test --project=chromium --project=chromium-client --project=chromium-public
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
