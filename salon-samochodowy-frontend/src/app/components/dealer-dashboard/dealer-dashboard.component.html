@@ -1,0 +1,78 @@
+<div class="dashboard-container container py-4">
+
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center align-items-center py-5">
+      <mat-spinner diameter="56"></mat-spinner>
+    </div>
+  } @else {
+
+    <div class="mb-4">
+      <h1 class="dashboard-title">
+        <i class="bi bi-speedometer2 me-2"></i>Panel Dealera &mdash; Statystyki floty
+      </h1>
+      <p class="text-muted">Przegląd aktualnego stanu floty samochodów.</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card stat-card--blue">
+          <div class="stat-card__icon"><i class="bi bi-car-front"></i></div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Wszystkie auta</span>
+            <span class="stat-card__value">{{ carsCount() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card stat-card--green">
+          <div class="stat-card__icon"><i class="bi bi-check-circle"></i></div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Dostępne do wynajmu</span>
+            <span class="stat-card__value">{{ availableCarsCount() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card stat-card--red">
+          <div class="stat-card__icon"><i class="bi bi-bag-check"></i></div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Sprzedane</span>
+            <span class="stat-card__value">{{ soldCars() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card stat-card--orange">
+          <div class="stat-card__icon"><i class="bi bi-key"></i></div>
+          <div class="stat-card__body">
+            <span class="stat-card__label">Wynajęte</span>
+            <span class="stat-card__value">{{ rentedCars() }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="fleet-value-card mb-4">
+      <i class="bi bi-currency-exchange fleet-value-card__icon"></i>
+      <div>
+        <p class="fleet-value-card__label">Wartość floty</p>
+        <p class="fleet-value-card__amount">{{ totalFleetValue() | number:'1.0-0' }}&nbsp;PLN</p>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h2 class="quick-actions__title">Szybkie akcje</h2>
+      <div class="d-flex flex-wrap gap-2">
+        <a routerLink="/cars" class="btn btn-outline-primary">
+          <i class="bi bi-list-ul me-1"></i>Lista samochodów
+        </a>
+      </div>
+    </div>
+
+  }
+</div>

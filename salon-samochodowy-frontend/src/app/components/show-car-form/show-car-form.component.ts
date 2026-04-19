@@ -52,12 +52,12 @@ export class ShowCarForm {
   ) {
     Object.assign(this.car, data);
     this.showcarform = this.fb.group({
-      brand: [this.car.brand, Validators.required],
-      model: [this.car.model, Validators.required],
-      year: [this.car.year, [Validators.required, Validators.min(1886), Validators.max(new Date().getFullYear())]],
-      vin: [this.car.vin,[Validators.required, Validators.pattern(/^[A-HJ-NPR-Z0-9]{17}$/)]],//Dozwolone znaki w walidacji: Duże litery od A do Z z wyłączeniem I oraz O oraz liczby
-      price:[this.car.price, [Validators.required, Validators.min(0)]],
-      horsePower: [this.car.horsePower, [Validators.required, Validators.min(1)]],
+      brand: [this.car.brand, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      model: [this.car.model, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+      year: [this.car.year, [Validators.required, Validators.min(1900), Validators.max(2030)]],
+      vin: [this.car.vin, [Validators.required, Validators.pattern(/^[A-HJ-NPR-Z0-9]{17}$/)]],
+      price: [this.car.price, [Validators.required, Validators.min(1), Validators.max(99999999)]],
+      horsePower: [this.car.horsePower, [Validators.required, Validators.min(1), Validators.max(3000)]],
       isAvailableForRent: [this.car.isAvailableForRent]
     })
   }

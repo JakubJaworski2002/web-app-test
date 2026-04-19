@@ -8,8 +8,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
       </div>
       <div class="modal-body">
-        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-          
+        <form [formGroup]="activeForm" (ngSubmit)="onSubmit()">
+
           <!-- Nazwa użytkownika -->
           <div class="mb-3">
             <label for="username" class="form-label">Nazwa użytkownika</label>
@@ -17,52 +17,39 @@
               type="text"
               class="form-control"
               id="username"
-              [(ngModel)]="username"
-              name="username"
-              #usernameModel="ngModel"
-              required
-              minlength="3"
+              formControlName="username"
             >
-            @if(usernameModel.invalid && (usernameModel.dirty || usernameModel.touched))
-            {
+            @if(activeForm.get('username')?.invalid && (activeForm.get('username')?.dirty || activeForm.get('username')?.touched)) {
               <div class="text-danger">
-                @if(usernameModel.errors?.['required'])
-                {
-                  <div>Nazwa użytkownika jest wymagana.</div>
+                @if(activeForm.get('username')?.errors?.['required']) {
+                  <div>Pole jest wymagane.</div>
                 }
-                @if(usernameModel.errors?.['minlength'])
-                {
+                @if(activeForm.get('username')?.errors?.['minlength']) {
                   <div>Nazwa użytkownika musi mieć co najmniej 3 znaki.</div>
-                }  
+                }
+                @if(activeForm.get('username')?.errors?.['maxlength']) {
+                  <div>Nazwa użytkownika może mieć maksymalnie 30 znaków.</div>
+                }
               </div>
             }
-
           </div>
-          
+
           <!-- E-mail (tylko rejestracja) -->
-          @if(!isLoginMode)
-          {
+          @if(!isLoginMode) {
             <div class="mb-3">
               <label for="email" class="form-label">Adres e-mail</label>
               <input
                 type="email"
                 class="form-control"
                 id="email"
-                [(ngModel)]="email"
-                name="email"
-                #emailModel="ngModel"
-                required
-                email
+                formControlName="email"
               >
-              @if(emailModel.invalid && (emailModel.dirty || emailModel.touched))
-              {
+              @if(activeForm.get('email')?.invalid && (activeForm.get('email')?.dirty || activeForm.get('email')?.touched)) {
                 <div class="text-danger">
-                  @if(emailModel.errors?.['required'])
-                  {
+                  @if(activeForm.get('email')?.errors?.['required']) {
                     <div>Adres e-mail jest wymagany.</div>
                   }
-                  @if(emailModel.errors?.['email'])
-                  {
+                  @if(activeForm.get('email')?.errors?.['email']) {
                     <div>Podaj prawidłowy adres e-mail.</div>
                   }
                 </div>
@@ -77,31 +64,25 @@
               type="password"
               class="form-control"
               id="password"
-              [(ngModel)]="password"
-              name="password"
-              #passwordModel="ngModel"
-              required
-              minlength="6"
+              formControlName="password"
             >
-            @if(passwordModel.invalid && (passwordModel.dirty || passwordModel.touched))
-            {
+            @if(activeForm.get('password')?.invalid && (activeForm.get('password')?.dirty || activeForm.get('password')?.touched)) {
               <div class="text-danger">
-                @if(passwordModel.errors?.['required'])
-                {
+                @if(activeForm.get('password')?.errors?.['required']) {
                   <div>Hasło jest wymagane.</div>
                 }
-                @if(passwordModel.errors?.['minlength'])
-                {
+                @if(activeForm.get('password')?.errors?.['minlength']) {
                   <div>Hasło musi mieć co najmniej 6 znaków.</div>
+                }
+                @if(activeForm.get('password')?.errors?.['pattern']) {
+                  <div>Hasło musi zawierać co najmniej 1 wielką literę, 1 cyfrę i 1 znak specjalny.</div>
                 }
               </div>
             }
-
           </div>
 
           <!-- Pola rejestracyjne -->
-           @if(!isLoginMode)
-           {
+          @if(!isLoginMode) {
             <div>
               <!-- Imię -->
               <div class="mb-3">
@@ -110,23 +91,20 @@
                   type="text"
                   class="form-control"
                   id="firstName"
-                  [(ngModel)]="firstName"
-                  name="firstName"
-                  #firstNameModel="ngModel"
-                  required
+                  formControlName="firstName"
                 >
-                @if(firstNameModel.invalid && (firstNameModel.dirty || firstNameModel.touched))
-                {
+                @if(activeForm.get('firstName')?.invalid && (activeForm.get('firstName')?.dirty || activeForm.get('firstName')?.touched)) {
                   <div class="text-danger">
-                    @if(firstNameModel.errors?.['required'])
-                    {
-                      <div>Imię jest wymagane.</div>
+                    @if(activeForm.get('firstName')?.errors?.['required']) {
+                      <div>Pole jest wymagane.</div>
+                    }
+                    @if(activeForm.get('firstName')?.errors?.['minlength']) {
+                      <div>Imię musi mieć co najmniej 2 znaki.</div>
                     }
                   </div>
                 }
-                
               </div>
-              
+
               <!-- Nazwisko -->
               <div class="mb-3">
                 <label for="lastName" class="form-label">Nazwisko</label>
@@ -134,44 +112,39 @@
                   type="text"
                   class="form-control"
                   id="lastName"
-                  [(ngModel)]="lastName"
-                  name="lastName"
-                  #lastNameModel="ngModel"
-                  required
+                  formControlName="lastName"
                 >
-                @if(lastNameModel.invalid && (lastNameModel.dirty || lastNameModel.touched))
-                {
+                @if(activeForm.get('lastName')?.invalid && (activeForm.get('lastName')?.dirty || activeForm.get('lastName')?.touched)) {
                   <div class="text-danger">
-                    @if(lastNameModel.errors?.['required'])
-                    {
-                      <div>Nazwisko jest wymagane.</div>
+                    @if(activeForm.get('lastName')?.errors?.['required']) {
+                      <div>Pole jest wymagane.</div>
+                    }
+                    @if(activeForm.get('lastName')?.errors?.['minlength']) {
+                      <div>Nazwisko musi mieć co najmniej 2 znaki.</div>
                     }
                   </div>
                 }
               </div>
             </div>
-           }
-
+          }
 
           <!-- Komunikaty o błędach i sukcesie -->
-           @if(errorMessage)
-           {
+          @if(errorMessage) {
             <div class="alert alert-danger">
               {{ errorMessage }}
             </div>
-           }
-           @if(successMessage)
-           {
+          }
+          @if(successMessage) {
             <div class="alert alert-success">
               {{ successMessage }}
             </div>
-           }
-          
+          }
+
           <!-- Przycisk Submit -->
           <button
             type="submit"
             class="btn btn-primary w-100"
-            [disabled]="authForm.invalid"
+            [disabled]="activeForm.invalid"
           >
             {{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj się' }}
           </button>

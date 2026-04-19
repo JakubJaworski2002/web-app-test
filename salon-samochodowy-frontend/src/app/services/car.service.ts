@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
@@ -64,7 +64,7 @@ export class CarService {
    * Można rozważyć przeniesienie tego do pliku konfiguracyjnego.
    * @type {string}
    */
-  private apiUrl: string = 'http://localhost:3000/cars';
+  private apiUrl: string = 'http://localhost:3000/api/v1/cars';
   
   /**
    * BehaviorSubject przechowujący bieżącą listę samochodów.
@@ -78,6 +78,13 @@ export class CarService {
    * @type {Observable<Car[]>}
    */
   public cars$: Observable<Car[]> = this.carsSubject.asObservable();
+
+  // Signals (Angular 16+ reactive state)
+  readonly carsSignal = signal<Car[]>([]);
+  readonly carsCount = computed(() => this.carsSignal().length);
+  readonly availableCars = computed(() =>
+    this.carsSignal().filter(c => c.isAvailableForRent && c.ownerId == null)
+  );
 
   /**
    * Konstruktor serwisu CarService.
@@ -101,7 +108,10 @@ export class CarService {
         })
       )
       .subscribe(
-        (cars) => this.carsSubject.next(cars)
+        (cars) => {
+          this.carsSubject.next(cars);
+          this.carsSignal.set(cars);
+        }
       );
   }
 
@@ -143,6 +153,7 @@ export class CarService {
         tap((car: Car) => {
           const currentCars = this.carsSubject.getValue();
           this.carsSubject.next([...currentCars, car]);
+          this.carsSignal.set([...currentCars, car]);
         }),
         catchError(error => {
           console.error('Error adding car:', error);
@@ -181,6 +192,7 @@ export class CarService {
           if (index !== -1) {
             currentCars[index] = car;
             this.carsSubject.next([...currentCars]);
+            this.carsSignal.set([...currentCars]);
           }
         }),
         catchError(error => {
@@ -203,6 +215,7 @@ export class CarService {
           const currentCars = this.carsSubject.getValue();
           const updatedCars = currentCars.filter(car => car.id !== id);
           this.carsSubject.next(updatedCars);
+          this.carsSignal.set(updatedCars);
         }),
         catchError(error => {
           console.error(`Error deleting car with ID ${id}:`, error);
@@ -333,6 +346,7 @@ export class CarService {
             if (index !== -1) {
               currentCars[index] = updatedCar;
               this.carsSubject.next([...currentCars]);
+              this.carsSignal.set([...currentCars]);
             }
           }
         }

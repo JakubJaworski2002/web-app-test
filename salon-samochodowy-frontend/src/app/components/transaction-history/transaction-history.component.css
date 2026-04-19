@@ -1,0 +1,10 @@
+.badge-buy     { background-color: #28a745; color: #fff; padding: .4em .75em; border-radius: .375rem; font-size: .85em; font-weight: 600; }
+.badge-rent    { background-color: #0d6efd; color: #fff; padding: .4em .75em; border-radius: .375rem; font-size: .85em; font-weight: 600; }
+.badge-leasing { background-color: #fd7e14; color: #fff; padding: .4em .75em; border-radius: .375rem; font-size: .85em; font-weight: 600; }
+.badge-return  { background-color: #6c757d; color: #fff; padding: .4em .75em; border-radius: .375rem; font-size: .85em; font-weight: 600; }
+
+.table-responsive {
+  border-radius: .5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}

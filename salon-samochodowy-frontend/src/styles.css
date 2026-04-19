@@ -1,17 +1,129 @@
+/* ============================================
+   Design System — CSS Custom Properties
+   ============================================ */
+:root {
+  /* Kolory */
+  --color-primary: #1a237e;
+  --color-primary-light: #534bae;
+  --color-primary-dark: #000051;
+  --color-secondary: #e53935;
+  --color-secondary-light: #ff6f60;
+  --color-secondary-dark: #ab000d;
+
+  --color-success: #2e7d32;
+  --color-success-bg: #e8f5e9;
+  --color-error: #c62828;
+  --color-error-bg: #ffebee;
+  --color-info: #1565c0;
+  --color-info-bg: #e3f2fd;
+  --color-warning: #f57f17;
+  --color-warning-bg: #fff9c4;
+
+  --color-background: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-border: #e0e0e0;
+  --color-text-primary: #212121;
+  --color-text-secondary: #757575;
+  --color-text-disabled: #bdbdbd;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+
+  /* Typography */
+  --font-family: 'Roboto', 'Segoe UI', sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+}
+
+/* ============================================
+   Base
+   ============================================ */
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   Utility
+   ============================================ */
 .d-flex {
-    display: flex;
-    gap: 8px; 
-    flex-wrap: wrap; 
-  }
-  
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+button {
+  min-width: 120px;
+  justify-content: center;
+}
+
+@media (max-width: 576px) {
   button {
-    min-width: 120px; 
-    justify-content: center;
+    flex: 1 1 100%;
   }
-  
-  @media (max-width: 576px) {
-    button {
-      flex: 1 1 100%; 
-    }
-  }
+}
+
+/* ============================================
+   MatSnackBar — style powiadomień
+   ============================================ */
+.snack-success .mdc-snackbar__surface {
+  background-color: var(--color-success) !important;
+  color: white !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background-color: var(--color-error) !important;
+  color: white !important;
+}
+
+.snack-info .mdc-snackbar__surface {
+  background-color: var(--color-info) !important;
+  color: white !important;
+}
+
+/* ============================================
+   Car Cards
+   ============================================ */
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.car-image-placeholder {
+  background-color: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 180px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
   

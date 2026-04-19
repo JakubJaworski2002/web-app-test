@@ -3,6 +3,7 @@ import { Car, CarService } from '../../services/car.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowCarForm } from '../show-car-form/show-car-form.component';
 import { AuthenticationService } from '../../services/authentication.service';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * @module EditCarComponent
@@ -57,72 +58,29 @@ export class EditCarComponent {
    * Usługa do zarządzania danymi samochodów.
    */
   private carService = inject(CarService);
-
-  /**
-   * @private
-   * @property
-   * @type {MatDialog}
-   * @description
-   * Serwis do otwierania okien dialogowych.
-   */
   private dialog = inject(MatDialog);
-
-  /**
-   * @private
-   * @property
-   * @type {AuthenticationService}
-   * @description
-   * Usługa do zarządzania uwierzytelnianiem użytkowników.
-   */
   private authService = inject(AuthenticationService);
+  private notify = inject(NotificationService);
 
-  /**
-   * @constructor
-   * @description
-   * Inicjalizuje komponent i subskrybuje strumień aktualnego użytkownika, aby ustawić flagę `isDealer` na podstawie danych użytkownika.
-   */
   constructor() {
-    // Subskrybuj strumień currentUser$
     this.authService.currentUser$.subscribe((user) => {
-      this.isDealer = user?.isDealer ?? false; // Ustaw flagę na podstawie danych użytkownika
+      this.isDealer = user?.isDealer ?? false;
     });
   }
 
-  /**
-   * @method
-   * @name editCar
-   * @description
-   * Aktualizuje dane samochodu za pomocą usługi `CarService`. Po pomyślnej aktualizacji wyświetla komunikat o sukcesie, w przeciwnym razie informuje o błędzie.
-   *
-   * @example
-   * ```typescript
-   * this.editCar();
-   * ```
-   */
   editCar() {
     this.carService.updateCar(this.car.id, this.car).subscribe(
       (updatedCar) => {
         console.log('Samochód zmodyfikowany:', updatedCar);
-        alert('Samochód zmodyfikowany!');
+        this.notify.success('Samochód zmodyfikowany!');
       },
       (error) => {
         console.error('Błąd przy edytowaniu samochodu:', error);
-        alert('Wystąpił błąd przy edytowaniu samochodu.');
+        this.notify.error('Wystąpił błąd przy edytowaniu samochodu.');
       }
     );
   }
 
-  /**
-   * @method
-   * @name openEditCarDialog
-   * @description
-   * Otwiera okno dialogowe z formularzem edycji samochodu. Po zamknięciu dialogu, jeśli wynik jest dostępny, aktualizuje dane samochodu i wywołuje metodę `editCar`.
-   *
-   * @example
-   * ```typescript
-   * this.openEditCarDialog();
-   * ```
-   */
   openEditCarDialog(): void {
     const dialogRef = this.dialog.open(ShowCarForm, {
       width: '600px',
@@ -132,24 +90,19 @@ export class EditCarComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const { car, file } = result;
-
-        // Aktualizuj dane samochodu w bazie
         this.carService.updateCar(car.id, car).subscribe(
           (updatedCar) => {
-            console.log('Samochód zmodyfikowany:', updatedCar);
-
-            // Jeśli dodano plik, wyślij go na serwer
             if (file) {
               this.carService.uploadCarImage(updatedCar.id, file).subscribe(() => {
-                alert('Samochód i zdjęcie zostały zmodyfikowane!');
+                this.notify.success('Samochód i zdjęcie zostały zmodyfikowane!');
               });
             } else {
-              alert('Samochód został zmodyfikowany!');
+              this.notify.success('Samochód został zmodyfikowany!');
             }
           },
           (error) => {
             console.error('Błąd przy edytowaniu samochodu:', error);
-            alert('Wystąpił błąd przy edytowaniu samochodu.');
+            this.notify.error('Wystąpił błąd przy edytowaniu samochodu.');
           }
         );
       }

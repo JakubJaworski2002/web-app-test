@@ -6,6 +6,7 @@ module.exports = {
     testMatch: [
         '<rootDir>/tests/**/*.test.ts',
         '<rootDir>/tests/**/*.test.js',
+        '<rootDir>/__tests__/**/*.test.js',
     ],
     collectCoverageFrom: [
         '**/*.{js,ts}',
@@ -13,5 +14,6 @@ module.exports = {
         '!**/node_modules/**',
         '!**/dist/**',
         '!**/tests/**',
+        '!**/__tests__/**',
     ],
 };

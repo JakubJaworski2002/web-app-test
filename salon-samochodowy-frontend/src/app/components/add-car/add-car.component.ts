@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ShowCarForm } from '../show-car-form/show-car-form.component';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * Komponent odpowiedzialny za dodawanie nowego samochodu do systemu.
@@ -45,43 +46,10 @@ export class AddCarComponent {
     isAvailableForRent: true
   };
   
-  /**
-   * Serwis dialogów Angular Material.
-   */
   private dialog = inject(MatDialog);
-  
-  /**
-   * Serwis do zarządzania operacjami na samochodach.
-   */
   private carService = inject(CarService);
+  private notify = inject(NotificationService);
 
-  /**
-   * Metoda odpowiedzialna za dodanie nowego samochodu poprzez `CarService`.
-   * 
-   * @remarks
-   * Metoda subskrybuje się do Observable zwróconego przez `addCar` i 
-   * obsługuje zarówno sukces, jak i błąd operacji.
-   */
-  /*addCar(): void {
-    this.carService.addCar(this.car).subscribe(
-      (newCar) => {
-        console.log('Nowy samochód dodany:', newCar);
-        alert('Samochód został dodany!');
-      },
-      (error) => {
-        console.error('Błąd przy dodawaniu samochodu:', error);
-        alert('Wystąpił błąd przy dodawaniu samochodu.');
-      }
-    );
-  }*/
-
-  /**
-   * Metoda otwierająca dialog formularza do dodawania samochodu.
-   * 
-   * @remarks
-   * Po zamknięciu dialogu, jeśli użytkownik zatwierdził dane, 
-   * samochód zostanie dodany poprzez metodę `addCar`.
-   */
 openAddCarDialog(): void {
     const dialogRef = this.dialog.open(ShowCarForm, {
         width: '600px',
@@ -94,12 +62,13 @@ openAddCarDialog(): void {
             this.carService.addCar(car).subscribe(newCar => {
                 if (file) {
                     this.carService.uploadCarImage(newCar.id, file).subscribe(() => {
-                        alert('Samochód i zdjęcie zostały dodane!');
+                        this.notify.success('Samochód i zdjęcie zostały dodane!');
                     });
                 } else {
-                    //alert('Samochód został dodany1!');
-                    console.log(car);
+                    this.notify.success('Samochód został dodany!');
                 }
+            }, () => {
+                this.notify.error('Wystąpił błąd przy dodawaniu samochodu.');
             });
         }
     });

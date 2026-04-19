@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Car, LeasingRequest, LeasingResponse, CarService } from '../../services/car.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Subscription } from 'rxjs';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * CalculateLeasingComponent umożliwia obliczenie warunków leasingu dla wybranego samochodu.
@@ -76,27 +77,10 @@ export class CalculateLeasingComponent {
    * Serwis do zarządzania samochodami.
    */
   private carService = inject(CarService);
-
-  /**
-   * Serwis do zarządzania dialogami.
-   */
   private dialog = inject(MatDialog);
-
-  /**
-   * Flaga określająca, czy aktualnie zalogowany użytkownik jest dealerem.
-   * @type {boolean}
-   */
-  isDealer = false;
-
-  /**
-   * Serwis uwierzytelniania.
-   */
   private authService = inject(AuthenticationService);
-
-  /**
-   * Subskrypcja na strumień aktualnego użytkownika.
-   * @type {Subscription}
-   */
+  private notify = inject(NotificationService);
+  isDealer = false;
   private userSubscription: Subscription;
 
   /**
@@ -124,7 +108,7 @@ export class CalculateLeasingComponent {
       },
       (error) => {
         console.error('Błąd przy wyliczeniu leasingu:', error);
-        alert('Wystąpił błąd przy wyliczaniu leasingu.');
+        this.notify.error('Wystąpił błąd przy wyliczaniu leasingu.');
       }
     );
   }
